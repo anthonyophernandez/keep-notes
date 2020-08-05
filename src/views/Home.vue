@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full h-full">
     <header class="w-full h-16">
-      <div class="flex items-center justify-between w-full h-full border-b border-gray-700">
+      <div class="flex items-center md:justify-between w-full h-full border-b border-gray-700">
         <button class="flex items-center justify-center w-10 h-10 ml-5 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none focus:bg-gray-600 focus:bg-opacity-25" @click="toggleMenu">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current text-white icon icon-tabler icon-tabler-menu" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -9,7 +9,7 @@
             <line x1="4" y1="16" x2="20" y2="16" />
           </svg>
         </button>
-        <div class="relative w-full max-w-md mx-2">
+        <div class="relative w-full md:max-w-md mx-6">
           <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current text-gray-600 icon icon-tabler icon-tabler-search" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z"/>
@@ -19,7 +19,7 @@
           </span>
           <input class="w-full pl-10 pr-4 py-2 bg-gray-600 bg-opacity-25 rounded-lg focus:outline-none focus:bg-gray-200 placeholder-gray-600" type="text" placeholder="Search">
         </div>
-        <button class="flex items-center justify-center w-10 h-10 mr-2 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none text-gray-600 hover:text-white" @click="isDisplayedGrid = !isDisplayedGrid">
+        <button class="hidden md:flex items-center justify-center w-10 h-10 mr-2 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none text-gray-600 hover:text-white" @click="isDisplayedGrid = !isDisplayedGrid">
           <svg v-show="isDisplayedGrid" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-grid" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <rect x="4" y="4" width="6" height="6" rx="1" />
@@ -88,11 +88,11 @@
             <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
             <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
           </svg>
-          <span v-show="isMenuDisplayed">Bin</span>
+          <span v-show="isMenuDisplayed">Trash</span>
         </button>
       </div>
     </aside>
-    <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 z-40' : 'ml-20'">
+    <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <div class="relative flex flex-col w-full max-w-xl h-auto mx-auto mt-2 border border-gray-700 rounded-lg">
         <button class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -143,7 +143,7 @@
           <button class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none">Close</button>
         </div>
       </div>
-      <div class="grid gap-3 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1' : 'grid-cols-1'">
+      <div class="grid gap-3 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
         <NoteCard v-for="index in 14" :key="index" @mouseover="isVisible = true" @mouseleave="isVisible = false" />
       </div>
     </main>
