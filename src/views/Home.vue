@@ -19,7 +19,7 @@
           </span>
           <input class="w-full pl-10 pr-4 py-2 bg-gray-600 bg-opacity-25 rounded-lg focus:outline-none focus:bg-gray-200 placeholder-gray-600" type="text" placeholder="Search">
         </div>
-        <button class="flex items-center justify-center w-10 h-10 mr-2 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none text-gray-600 hover:text-white" @click="toggleMenu">
+        <button class="flex items-center justify-center w-10 h-10 mr-2 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none text-gray-600 hover:text-white" @click="isDisplayedGrid = !isDisplayedGrid">
           <svg v-show="isDisplayedGrid" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-grid" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <rect x="4" y="4" width="6" height="6" rx="1" />
@@ -143,7 +143,7 @@
           <button class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none">Close</button>
         </div>
       </div>
-      <div class="grid gap-3 mt-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1' : 'grid-cols-1'">
+      <div class="grid gap-3 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1' : 'grid-cols-1'">
         <NoteCard v-for="index in 14" :key="index" @mouseover="isVisible = true" @mouseleave="isVisible = false" />
       </div>
     </main>
