@@ -5,7 +5,7 @@
         <path stroke="none" d="M0 0h24v24H0z"/>
         <path d="M5 12l5 5l10 -10" />
       </svg>
-      <div ref="select-note" class="hidden absolute items-center justify-center w-20 -mb-12 -mr-16 md:mr-0 rounded bg-gray-700 bg-opacity-75">
+      <div ref="select-note" class="hidden absolute items-center justify-center w-20 -mb-12 -mr-16 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
         <span class="text-xs text-white break-normal">Select note</span>
       </div>
     </button>
@@ -39,7 +39,7 @@
             <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
             <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
           </svg>
-          <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 md:mr-0 rounded bg-gray-700 bg-opacity-75">
+          <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
             <span class="text-xs text-white">Remind me</span>
           </div>
         </button>
