@@ -1,17 +1,8 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl h-full border border-gray-700 rounded-lg" @mouseover="isVisible = true" @mouseleave="isVisible = false">
-    <button class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
-      <svg v-show="isVisible" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current bg-white rounded-full icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path stroke="none" d="M0 0h24v24H0z"/>
-        <path d="M5 12l5 5l10 -10" />
-      </svg>
-      <div ref="select-note" class="hidden absolute items-center justify-center w-20 -mb-12 -mr-16 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
-        <span class="text-xs text-white break-normal">Select note</span>
-      </div>
-    </button>
-    <div class="absolute top-0 right-0">
+  <div class="relative flex flex-col w-full max-w-xl h-auto border border-gray-700 rounded-lg">
+    <div v-if="isVisible" class="absolute top-0 right-0">
       <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
-        <svg v-show="isVisible" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
           <circle cx="12" cy="6" r="3" />
@@ -21,18 +12,12 @@
         </div>
       </button>
     </div>
-    <div class="w-full h-full pl-4 pr-10">
-      <h2 class="text-base text-white break-words font-bold">Title</h2>
-      <div class="mt-2">
-        <p class="text-sm text-white">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae, officia! Repudiandae exercitationem hic voluptates facere in est, aliquid inventore, quia quidem dolores, quos enim explicabo. Adipisci ea expedita dignissimos quas.
-          Nam aliquid enim nulla sed praesentium nesciunt, exercitationem iste eveniet, beatae a, impedit fuga? Quis nisi, ullam sint fuga delectus assumenda voluptatum quam commodi, modi error quibusdam consequuntur facere soluta?
-          Doloremque quod suscipit, laudantium nisi, quis dolorem a atque soluta illo voluptatum eaque quos minus explicabo ab corrupti adipisci voluptatem, illum modi qui? Consequuntur possimus repellendus eius, aspernatur optio accusamus.
-        </p>
-      </div>
+    <div class="w-full h-full my-2 pl-4 pr-10" @click="isVisible = true">
+      <textarea v-if="isVisible" class="resize-y h-auto w-full mb-2 bg-transparent text-white text-lg font-bold placeholder-gray-500 focus:outline-none" placeholder="Title" rows="2"></textarea>
+      <textarea ref="textarea-note" class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none" :class="(isVisible) ? 'h-auto resize-y font-normal text-base' : 'h-6 resize-none font-bold text-lg'" placeholder="Take a note..." :rows="(isVisible) ? '3' : '1'" ></textarea>
     </div>
-    <div class="flex items-center justify-between w-full h-12 mb-1 px-2">
-      <div v-show="isVisible" class="flex items-center">
+    <div v-if="isVisible" class="flex items-center justify-between w-full h-10 mt-2 mb-1 px-2">
+      <div class="flex items-center">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -78,16 +63,14 @@
           </div>
         </button>
       </div>
-      <!-- Close Button
-      <button v-show="isVisible" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none">Close</button>
-      -->
+      <button class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isVisible = false">Close</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'NoteCard',
+  name: 'TakeNote',
   data () {
     return {
       isVisible: false
