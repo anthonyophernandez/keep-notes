@@ -1,7 +1,9 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl h-full border border-gray-700 rounded-lg" @mouseover="isVisible = true" @mouseleave="isVisible = false">
-    <button class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
-      <svg v-show="isVisible" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current bg-white rounded-full icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <div class="relative flex flex-col w-full max-w-xl bg-black border border-gray-700 rounded-lg" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+    <div v-show="!isVisible && !isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
+    <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
+    <button v-show="isVisible && !isNoteOpened" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current bg-white rounded-full icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z"/>
         <path d="M5 12l5 5l10 -10" />
       </svg>
@@ -11,7 +13,7 @@
     </button>
     <div class="absolute top-0 right-0">
       <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
-        <svg v-show="isVisible" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-show="isVisible || isNoteOpened" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
           <circle cx="12" cy="6" r="3" />
@@ -32,7 +34,7 @@
       </div>
     </div>
     <div class="flex items-center justify-between w-full h-12 mb-1 px-2">
-      <div v-show="isVisible" class="flex items-center">
+      <div v-show="isVisible || isNoteOpened" class="flex items-center">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -78,9 +80,7 @@
           </div>
         </button>
       </div>
-      <!-- Close Button
-      <button v-show="isVisible" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none">Close</button>
-      -->
+      <button v-show="isNoteOpened" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="$emit('close')">Close</button>
     </div>
   </div>
 </template>
@@ -88,6 +88,7 @@
 <script>
 export default {
   name: 'NoteCard',
+  props: ['isNoteOpened'],
   data () {
     return {
       isVisible: false
