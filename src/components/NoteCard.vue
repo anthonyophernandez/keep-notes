@@ -23,7 +23,7 @@
         </div>
       </button>
     </div>
-    <div class="w-full h-full pl-4 pr-10">
+    <div class="w-full h-full pl-4 pr-10" @click="$emit('open')">
       <h2 class="text-base text-white break-words font-bold">Title</h2>
       <div class="mt-2">
         <p class="text-sm text-white">

@@ -95,7 +95,7 @@
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <TakeNote class="mx-auto mt-2 mb-8" />
       <div class="grid gap-3 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
-        <NoteCard v-for="index in 14" :key="index" @click.native="openNote(index)" class="w-auto h-auto mx-auto" :class="openedNoteClass(index)"/>
+        <NoteCard class="w-auto h-auto mx-auto" :class="openedNoteClass(index)" v-for="index in 14" :key="index" @open="openNote(index)"/>
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
         <NoteCard class="z-50 mx-auto my-64" :isNoteOpened="isNoteOpened" @close="closeNote"/>
