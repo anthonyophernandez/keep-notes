@@ -1,8 +1,8 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl bg-black border border-gray-700 rounded-lg" @mouseover="isVisible = true" @mouseleave="isVisible = false">
-    <div v-show="!isVisible && !isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
+  <div class="relative flex flex-col w-full max-w-xl rounded-lg" :class="(isSelected) ? 'bg-yellow-500 bg-opacity-25 border-2 border-white' : 'bg-black border border-gray-700'" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+    <div v-show="!isVisible && !isNoteOpened && !isSelected" class="w-5 h-6 -mt-2 -ml-2"></div>
     <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
-    <button v-show="isVisible && !isNoteOpened" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
+    <button v-show="isVisible && !isNoteOpened || isSelected" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @click="selectNote" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current bg-white rounded-full icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z"/>
         <path d="M5 12l5 5l10 -10" />
@@ -91,7 +91,8 @@ export default {
   props: ['isNoteOpened'],
   data () {
     return {
-      isVisible: false
+      isVisible: false,
+      isSelected: false
     }
   },
   methods: {
@@ -102,6 +103,9 @@ export default {
     hideTooltip (elem) {
       this.$refs[elem].classList.remove('flex')
       this.$refs[elem].classList.add('hidden')
+    },
+    selectNote () {
+      this.isSelected = !this.isSelected
     }
   }
 }
