@@ -8,7 +8,8 @@
         <path d="M5 12l5 5l10 -10" />
       </svg>
       <div ref="select-note" class="hidden absolute items-center justify-center w-20 -mb-12 -mr-16 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
-        <span class="text-xs text-white break-normal">Select note</span>
+        <span v-show="!isSelected" class="text-xs text-white break-normal">Select note</span>
+        <span v-show="isSelected" class="text-xs text-white break-normal">Deselect note</span>
       </div>
     </button>
     <div class="absolute top-0 right-0">
