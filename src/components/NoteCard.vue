@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl rounded-lg" :class="(isSelected) ? 'bg-yellow-500 bg-opacity-25 border-2 border-white' : 'bg-black border border-gray-700'" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+  <div class="relative flex flex-col w-full max-w-xl bg-black rounded-lg" :class="(isSelected) ? 'border-2 border-white' : 'border border-gray-700'" @mouseover="isVisible = true" @mouseleave="isVisible = false">
     <div v-show="!isVisible && !isNoteOpened && !isSelected" class="w-5 h-6 -mt-2 -ml-2"></div>
     <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
     <button v-show="isVisible && !isNoteOpened || isSelected" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @click="selectNote" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
@@ -89,7 +89,7 @@
 <script>
 export default {
   name: 'NoteCard',
-  props: ['isNoteOpened'],
+  props: ['isNoteOpened', 'index'],
   data () {
     return {
       isVisible: false,
@@ -107,6 +107,11 @@ export default {
     },
     selectNote () {
       this.isSelected = !this.isSelected
+      if (this.isSelected) {
+        this.$emit('select', this.index)
+      } else {
+        this.$emit('unselect', this.index)
+      }
     }
   }
 }

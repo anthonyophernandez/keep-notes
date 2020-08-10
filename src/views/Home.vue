@@ -35,6 +35,77 @@
         </button>
       </div>
     </header>
+    <div v-show="selectedNotes.length > 0" class="absolute inset-x-0 top-0 z-50 flex items-center justify-between h-16 bg-black border-b border-gray-700">
+      <div class="flex items-center ml-5">
+        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="clearSelection" @mouseover="showTooltip('clear-selection')" @mouseleave="hideTooltip('clear-selection')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-6 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          <div ref="clear-selection" class="hidden absolute items-center justify-center w-10 -mb-16 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">Clear</span>
+          </div>
+        </button>
+        <h3 class="text-xl text-white ml-2">{{ selectedNotes.length }} selected</h3>
+      </div>
+      <div class="flex items-center mr-5">
+        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('pin')" @mouseleave="hideTooltip('pin')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
+            <circle cx="12" cy="6" r="3" />
+          </svg>
+          <div ref="pin" class="hidden absolute items-center justify-center w-8 -mb-16 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">Pin</span>
+          </div>
+        </button>
+        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+          </svg>
+          <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">Remind me</span>
+          </div>
+        </button>
+        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('change-color')" @mouseleave="hideTooltip('change-color')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M12 21a9 9 0 1 1 0 -18a9 8 0 0 1 9 8a4.5 4 0 0 1 -4.5 4h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <circle cx="7.5" cy="10.5" r=".5" fill="currentColor" />
+            <circle cx="12" cy="7.5" r=".5" fill="currentColor" />
+            <circle cx="16.5" cy="10.5" r=".5" fill="currentColor" />
+          </svg>
+          <div ref="change-color" class="hidden absolute items-center justify-center w-20 -mb-16 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">Change color</span>
+          </div>
+        </button>
+        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('archive')" @mouseleave="hideTooltip('archive')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-archive" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <rect x="3" y="4" width="18" height="4" rx="2" />
+            <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+            <line x1="10" y1="12" x2="14" y2="12" />
+          </svg>
+          <div ref="archive" class="hidden absolute items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">Archive</span>
+          </div>
+        </button>
+        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('more')" @mouseleave="hideTooltip('more')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-dots-vertical" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="19" r="1" />
+            <circle cx="12" cy="5" r="1" />
+          </svg>
+          <div ref="more" class="hidden absolute items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
+            <span class="text-xs text-white">More</span>
+          </div>
+        </button>
+      </div>
+    </div>
     <aside class="fixed inset-y-0 left-0 mt-16 bg-black" :class="(isMenuDisplayed) ? 'w-64 z-50' : 'w-20'" @mouseover="isMenuDisplayed = true" @mouseleave="isMenuDisplayed = isMenuButtonPressed">
       <div class="mt-2">
         <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass(1)]" @click="isSectionSelected = 1">
@@ -94,11 +165,11 @@
     </aside>
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <TakeNote class="mx-auto mt-2 mb-8" />
-      <div class="grid gap-3 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
-        <NoteCard class="w-auto h-auto mx-auto" :class="openedNoteClass(index)" v-for="index in 14" :key="index" @open="openNote(index)"/>
+      <div class="grid gap-5 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
+        <NoteCard :ref="'note-'+ index" class="w-auto h-auto mx-auto" :class="openedNoteClass(index)" v-for="index in 14" :key="index" :index="index" @open="openNote(index)" @select="addNoteToSelected" @unselect="removeNoteFromSelected"/>
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
-        <NoteCard class="z-50 mx-auto my-64" :isNoteOpened="isNoteOpened" @close="closeNote"/>
+        <NoteCard class="z-50 mx-auto my-64" :index="noteOpened" :isNoteOpened="isNoteOpened" @close="closeNote"/>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
     </main>
@@ -121,7 +192,8 @@ export default {
       isMenuButtonPressed: false,
       isSectionSelected: 1,
       isNoteOpened: false,
-      noteOpened: -1
+      noteOpened: -1,
+      selectedNotes: []
     }
   },
   methods: {
@@ -141,7 +213,33 @@ export default {
       this.isNoteOpened = false
     },
     openedNoteClass (index) {
-      return (this.noteOpened === index) ? 'bg-yellow-500 bg-opacity-25' : ''
+      return (this.noteOpened === index) ? 'bg-gray-500 bg-opacity-25' : ''
+    },
+    addNoteToSelected (ele) {
+      const index = this.selectedNotes.indexOf(ele)
+      if (index === -1) {
+        this.selectedNotes.push(ele)
+      }
+    },
+    removeNoteFromSelected (ele) {
+      const index = this.selectedNotes.indexOf(ele)
+      if (index !== -1) {
+        this.selectedNotes = [...this.selectedNotes.slice(0, index), ...this.selectedNotes.slice(index + 1)]
+      }
+    },
+    clearSelection () {
+      this.selectedNotes.forEach(ele => {
+        this.$refs['note-' + ele][0].selectNote()
+      })
+      this.selectedNotes = []
+    },
+    showTooltip (elem) {
+      this.$refs[elem].classList.remove('hidden')
+      this.$refs[elem].classList.add('flex')
+    },
+    hideTooltip (elem) {
+      this.$refs[elem].classList.remove('flex')
+      this.$refs[elem].classList.add('hidden')
     }
   }
 }
