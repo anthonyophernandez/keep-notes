@@ -13,14 +13,15 @@
       </div>
     </button>
     <div class="absolute top-0 right-0">
-      <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
-        <svg v-show="isVisible || isNoteOpened" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(isPinned) ? 'text-white' : 'text-gray-600'" @click="pinNote" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
+        <svg v-show="isVisible || isNoteOpened || isPinned" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
           <circle cx="12" cy="6" r="3" />
         </svg>
         <div ref="pin-note" class="hidden absolute items-center justify-center w-16 -mb-16 rounded bg-gray-700 bg-opacity-75">
-          <span class="text-xs text-white">Pin note</span>
+          <span v-show="!isPinned" class="text-xs text-white">Pin note</span>
+          <span v-show="isPinned" class="text-xs text-white">Unpin note</span>
         </div>
       </button>
     </div>
@@ -105,7 +106,8 @@ export default {
   data () {
     return {
       isVisible: false,
-      isSelected: false
+      isSelected: false,
+      isPinned: false
     }
   },
   methods: {
@@ -131,6 +133,14 @@ export default {
         this.$emit('select', this.index)
       } else {
         this.$emit('unselect', this.index)
+      }
+    },
+    pinNote () {
+      this.isPinned = !this.isPinned
+      if (this.isPinned) {
+        this.$emit('pin', this.index)
+      } else {
+        this.$emit('unpin', this.index)
       }
     }
   }

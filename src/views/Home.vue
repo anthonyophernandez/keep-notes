@@ -50,7 +50,7 @@
         <h3 class="text-xl text-white ml-2">{{ selectedNotes.length }} selected</h3>
       </div>
       <div class="flex items-center mr-5">
-        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('pin')" @mouseleave="hideTooltip('pin')">
+        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" @click="pinNotes" @mouseover="showTooltip('pin')" @mouseleave="hideTooltip('pin')">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
@@ -166,7 +166,16 @@
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <TakeNote class="mx-auto mt-2 mb-8" />
       <div class="grid gap-5 my-2" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
-        <NoteCard :ref="'note-'+ index" class="w-auto h-auto mx-auto" :class="openedNoteClass(index)" v-for="index in 14" :key="index" :index="index" @open="openNote(index)" @select="addNoteToSelected" @unselect="removeNoteFromSelected"/>
+        <NoteCard
+          :ref="'note-'+ index"
+          class="w-auto h-auto mx-auto"
+          :class="openedNoteClass(index)"
+          v-for="index in 14" :key="index"
+          :index="index"
+          @open="openNote(index)"
+          @select="addNoteToSelected"
+          @unselect="removeNoteFromSelected"
+        />
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
         <NoteCard class="z-50 mx-auto my-64" :index="noteOpened" :isNoteOpened="isNoteOpened" @close="closeNote"/>
@@ -215,14 +224,14 @@ export default {
     openedNoteClass (index) {
       return (this.noteOpened === index) ? 'bg-gray-500 bg-opacity-25' : ''
     },
-    addNoteToSelected (ele) {
-      const index = this.selectedNotes.indexOf(ele)
+    addNoteToSelected (elem) {
+      const index = this.selectedNotes.indexOf(elem)
       if (index === -1) {
-        this.selectedNotes.push(ele)
+        this.selectedNotes.push(elem)
       }
     },
-    removeNoteFromSelected (ele) {
-      const index = this.selectedNotes.indexOf(ele)
+    removeNoteFromSelected (elem) {
+      const index = this.selectedNotes.indexOf(elem)
       if (index !== -1) {
         this.selectedNotes = [...this.selectedNotes.slice(0, index), ...this.selectedNotes.slice(index + 1)]
       }
@@ -232,6 +241,14 @@ export default {
         this.$refs['note-' + ele][0].selectNote()
       })
       this.selectedNotes = []
+    },
+    pinNotes () {
+      this.selectedNotes.forEach(elem => {
+        if (!this.$refs['note-' + elem][0].isPinned) {
+          this.$refs['note-' + elem][0].pinNote()
+        }
+      })
+      this.clearSelection()
     },
     showTooltip (elem) {
       this.$refs[elem].classList.remove('hidden')
