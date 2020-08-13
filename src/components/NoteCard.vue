@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl rounded-lg bg-opacity-25" :class="[currentColor, (isSelected) ? 'border-2 border-white' : 'border border-gray-700']" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+  <div class="relative flex flex-col w-full max-w-xl rounded-lg" :class="[currentColor, (currentColor === 'bg-black')? 'bg-opacity-100' : 'bg-opacity-25', (isSelected) ? 'border-2 border-white' : 'border border-gray-700']" @mouseover="isVisible = true" @mouseleave="isVisible = false">
     <div v-show="!isVisible && !isNoteOpened && !isSelected" class="w-5 h-6 -mt-2 -ml-2"></div>
     <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
     <button v-show="isVisible && !isNoteOpened || isSelected" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @click="selectNote" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">

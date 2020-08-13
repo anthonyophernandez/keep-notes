@@ -79,12 +79,22 @@
 export default {
   name: 'ColorSelector',
   props: ['selectedIndexColor'],
+  computed: {
+    selectedIndex: {
+      get: function () {
+        return this.selectedIndexColor
+      },
+      set: function (newValue) {
+        return newValue
+      }
+    }
+  },
   methods: {
     selectedClass (index) {
-      return (index === this.selectedIndexColor) ? 'border-white' : 'border-gray-700'
+      return (index === this.selectedIndex) ? 'border-white' : 'border-gray-700'
     },
     changeColor (index, color) {
-      this.selectedIndexColor = index
+      this.selectedIndex = index
       this.$emit('changeColor', { selectedColor: color, selectedIndexColor: index })
     },
     showTooltip (elem) {
