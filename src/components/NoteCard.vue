@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl bg-black rounded-lg" :class="(isSelected) ? 'border-2 border-white' : 'border border-gray-700'" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+  <div class="relative flex flex-col w-full max-w-xl rounded-lg bg-opacity-25" :class="[currentColor, (isSelected) ? 'border-2 border-white' : 'border border-gray-700']" @mouseover="isVisible = true" @mouseleave="isVisible = false">
     <div v-show="!isVisible && !isNoteOpened && !isSelected" class="w-5 h-6 -mt-2 -ml-2"></div>
     <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
     <button v-show="isVisible && !isNoteOpened || isSelected" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @click="selectNote" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
@@ -60,7 +60,7 @@
           </div>
         </button>
         <div class="relative">
-          <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" @mouseleave.native="isShownColorSelector = false"/>
+          <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" :selectedIndexColor="selectedIndexColor" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
           <button
             class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none"
             @click="isShownColorSelector = !isShownColorSelector"
@@ -120,7 +120,9 @@ export default {
       isVisible: false,
       isSelected: false,
       isPinned: false,
-      isShownColorSelector: false
+      isShownColorSelector: false,
+      currentColor: 'bg-black',
+      selectedIndexColor: 1
     }
   },
   methods: {
@@ -155,6 +157,10 @@ export default {
       } else {
         this.$emit('unpin', this.index)
       }
+    },
+    changeColor (obj) {
+      this.currentColor = obj.selectedColor
+      this.selectedIndexColor = obj.selectedIndexColor
     }
   }
 }
