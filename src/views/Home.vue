@@ -222,7 +222,7 @@ export default {
       this.isNoteOpened = false
     },
     openedNoteClass (index) {
-      return (this.noteOpened === index) ? 'bg-gray-500 bg-opacity-25' : ''
+      return (this.noteOpened === index) ? 'border-yellow-500' : ''
     },
     addNoteToSelected (elem) {
       const index = this.selectedNotes.indexOf(elem)
