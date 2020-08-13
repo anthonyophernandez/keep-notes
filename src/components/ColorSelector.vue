@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-4 gap-1 w-24 p-1 border border-gray-700 rounded">
+  <div class="grid grid-cols-4 gap-1 w-24 p-1 bg-black border border-gray-700 rounded">
     <button class="relative flex items-center justify-center w-5 h-5 rounded-full focus:outline-none" @mouseover="showTooltip('color-black')" @mouseleave="hideTooltip('color-black')">
       <div class="w-5 h-5 border border-gray-700 hover:border-white rounded-full bg-black"></div>
       <div ref="color-black" class="hidden absolute items-center justify-center w-10 -mb-12 rounded bg-gray-700 bg-opacity-75">
