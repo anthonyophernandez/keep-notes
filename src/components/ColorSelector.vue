@@ -78,7 +78,12 @@
 <script>
 export default {
   name: 'ColorSelector',
-  props: ['selectedIndexColor'],
+  props: {
+    selectedIndexColor: {
+      type: Number,
+      default: 1
+    }
+  },
   computed: {
     selectedIndex: {
       get: function () {
