@@ -26,18 +26,22 @@
       </button>
     </div>
     <div class="w-full h-full pl-4 pr-10" @click="$emit('open')">
-      <h2 class="text-base text-white break-words font-bold" :class="(isNoteOpened) ? 'mt-0' : 'mt-2'">Title</h2>
+      <h2 class="text-base text-white break-words font-bold" :class="(isNoteOpened) ? 'mt-0' : 'mt-2'">{{ note.title }}</h2>
       <div class="mt-2">
         <p class="text-sm text-white">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae, officia! Repudiandae exercitationem hic voluptates facere in est, aliquid inventore, quia quidem dolores, quos enim explicabo. Adipisci ea expedita dignissimos quas.
-          Nam aliquid enim nulla sed praesentium nesciunt, exercitationem iste eveniet, beatae a, impedit fuga? Quis nisi, ullam sint fuga delectus assumenda voluptatum quam commodi, modi error quibusdam consequuntur facere soluta?
-          Doloremque quod suscipit, laudantium nisi, quis dolorem a atque soluta illo voluptatum eaque quos minus explicabo ab corrupti adipisci voluptatem, illum modi qui? Consequuntur possimus repellendus eius, aspernatur optio accusamus.
+          {{ note.content }}
         </p>
       </div>
     </div>
-    <div class="w-full px-2 mb-2" :class="(isNoteOpened) ? 'mt-4' : 'mt-0'">
-      <div class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700" v-for="index in 16" :key="index" @mouseover="showClose('close-tag-' + index)" @mouseleave="hideClose('close-tag-' + index)">
-        <span class="cursor-pointer text-white text-xs">label {{ index }}</span>
+    <div v-if="note.tags.length > 0" class="w-full px-2 mb-2" :class="(isNoteOpened) ? 'mt-4' : 'mt-0'">
+      <div
+        class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700"
+        v-for="(tag, index) in note.tags"
+        :key="index"
+        @mouseover="showClose('close-tag-' + index)"
+        @mouseleave="hideClose('close-tag-' + index)"
+      >
+        <span class="cursor-pointer text-white text-xs">{{ tag }}</span>
         <button :ref="'close-tag-' + index" class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -114,7 +118,7 @@ export default {
   components: {
     ColorSelector
   },
-  props: ['isNoteOpened', 'index'],
+  props: ['note', 'isNoteOpened', 'index'],
   data () {
     return {
       isVisible: false,

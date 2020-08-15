@@ -178,15 +178,16 @@
           :ref="'note-'+ index"
           class="w-auto h-auto mx-auto"
           :class="openedNoteClass(index)"
-          v-for="index in 14" :key="index"
+          v-for="(note, index) in notes" :key="index"
           :index="index"
+          :note="note"
           @open="openNote(index)"
           @select="addNoteToSelected"
           @unselect="removeNoteFromSelected"
         />
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
-        <NoteCard class="z-50 mx-auto my-64" :index="noteOpened" :isNoteOpened="isNoteOpened" @close="closeNote"/>
+        <NoteCard class="z-50 mx-auto my-64" :note="selectedNote" :index="selectedNoteIndex" :isNoteOpened="isNoteOpened" @close="closeNote"/>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
     </main>
@@ -197,6 +198,8 @@
 import NoteCard from '../components/NoteCard.vue'
 import TakeNote from '../components/TakeNote.vue'
 import ColorSelector from '../components/ColorSelector.vue'
+
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
@@ -212,10 +215,16 @@ export default {
       isMenuButtonPressed: false,
       isSectionSelected: 1,
       isNoteOpened: false,
-      noteOpened: -1,
+      selectedNoteIndex: -1,
+      selectedNote: {},
       selectedNotes: [],
       isShownColorSelector: false
     }
+  },
+  computed: {
+    ...mapState({
+      notes: state => state.notes
+    })
   },
   methods: {
     selectedSectionClass (index) {
@@ -226,15 +235,16 @@ export default {
       this.isMenuDisplayed = !this.isMenuDisplayed
     },
     openNote (index) {
-      this.noteOpened = index
+      this.selectedNote = this.notes[index]
+      this.selectedNoteIndex = index
       this.isNoteOpened = true
     },
     closeNote () {
-      this.noteOpened = -1
+      this.selectedNoteIndex = -1
       this.isNoteOpened = false
     },
     openedNoteClass (index) {
-      return (this.noteOpened === index) ? 'border-yellow-500' : ''
+      return (this.selectedNoteIndex === index) ? 'border-yellow-500' : ''
     },
     addNoteToSelected (elem) {
       const index = this.selectedNotes.indexOf(elem)
