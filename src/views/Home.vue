@@ -187,7 +187,9 @@
         />
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
-        <NoteCard class="z-50 mx-auto my-64" :note="selectedNote" :index="selectedNoteIndex" :isNoteOpened="isNoteOpened" @close="closeNote"/>
+        <div class="mx-auto my-64 w-full max-w-xl rounded-lg bg-black">
+          <NoteCard class="z-50" :note="selectedNote" :index="selectedNoteIndex" :isNoteOpened="isNoteOpened" @close="closeNote"/>
+        </div>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
     </main>

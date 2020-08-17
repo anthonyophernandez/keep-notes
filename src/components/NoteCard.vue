@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-full max-w-xl rounded-lg" :class="[currentColor, (currentColor === 'bg-black')? 'bg-opacity-100' : 'bg-opacity-25', (isSelected) ? 'border-2 border-white' : 'border border-gray-700']" @mouseover="isVisible = true" @mouseleave="isVisible = false">
+  <div class="relative flex flex-col w-full max-w-xl rounded-lg" :class="[note.currentColor, (note.currentColor === 'bg-black')? 'bg-opacity-100' : 'bg-opacity-25', (isSelected) ? 'border-2 border-white' : 'border border-gray-700']" @mouseover="isVisible = true" @mouseleave="isVisible = false">
     <div v-show="!isVisible && !isNoteOpened && !isSelected" class="w-5 h-6 -mt-2 -ml-2"></div>
     <div v-show="isNoteOpened" class="w-5 h-6 -mt-2 -ml-2"></div>
     <button v-show="isVisible && !isNoteOpened || isSelected" class="relative flex items-center justify-center w-5 h-6 -mt-2 -ml-2 focus:outline-none" @click="selectNote" @mouseover="showTooltip('select-note')" @mouseleave="hideTooltip('select-note')">
@@ -13,15 +13,15 @@
       </div>
     </button>
     <div class="absolute top-0 right-0">
-      <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(isPinned) ? 'text-white' : 'text-gray-600'" @click="pinNote" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
-        <svg v-show="isVisible || isNoteOpened || isPinned" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(note.isPinned) ? 'text-white' : 'text-gray-600'" @click="pinNote" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
+        <svg v-show="isVisible || isNoteOpened || note.isPinned" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
           <circle cx="12" cy="6" r="3" />
         </svg>
         <div ref="pin-note" class="hidden absolute items-center justify-center w-16 -mb-16 rounded bg-gray-700 bg-opacity-75">
-          <span v-show="!isPinned" class="text-xs text-white">Pin note</span>
-          <span v-show="isPinned" class="text-xs text-white">Unpin note</span>
+          <span v-show="!note.isPinned" class="text-xs text-white">Pin note</span>
+          <span v-show="note.isPinned" class="text-xs text-white">Unpin note</span>
         </div>
       </button>
     </div>
@@ -33,7 +33,7 @@
         </p>
       </div>
     </div>
-    <div v-if="note.tags.length > 0" class="w-full px-2 mb-2" :class="(isNoteOpened) ? 'mt-4' : 'mt-0'">
+    <div class="w-full px-2 mb-2" :class="(isNoteOpened) ? 'mt-4' : 'mt-0'">
       <div
         class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700"
         v-for="(tag, index) in note.tags"
@@ -64,7 +64,7 @@
           </div>
         </button>
         <div class="relative">
-          <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" :selectedIndexColor="selectedIndexColor" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
+          <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" :selectedIndexColor="note.selectedIndexColor" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
           <button
             class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none"
             @click="isShownColorSelector = !isShownColorSelector"
@@ -123,10 +123,7 @@ export default {
     return {
       isVisible: false,
       isSelected: false,
-      isPinned: false,
-      isShownColorSelector: false,
-      currentColor: 'bg-black',
-      selectedIndexColor: 1
+      isShownColorSelector: false
     }
   },
   methods: {
@@ -155,16 +152,16 @@ export default {
       }
     },
     pinNote () {
-      this.isPinned = !this.isPinned
-      if (this.isPinned) {
+      this.note.isPinned = !this.note.isPinned
+      if (this.note.isPinned) {
         this.$emit('pin', this.index)
       } else {
         this.$emit('unpin', this.index)
       }
     },
     changeColor (obj) {
-      this.currentColor = obj.selectedColor
-      this.selectedIndexColor = obj.selectedIndexColor
+      this.note.currentColor = obj.selectedColor
+      this.note.selectedIndexColor = obj.selectedIndexColor
     }
   }
 }
