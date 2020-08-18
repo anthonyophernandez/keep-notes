@@ -114,15 +114,15 @@
             </div>
           </button>
           <div class="absolute z-40 w-24 -ml-16 py-1 bg-black text-white border rounded" v-if="isShownMoreSection" @mouseleave="isShownMoreSection = false">
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Delete note</span>
-            </div>
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Add label</span>
-            </div>
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Make a copy</span>
-            </div>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25" @click="deleteNotes">
+              <span class="text-sm">Delete notes</span>
+            </button>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="text-sm">Add label</span>
+            </button>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="text-sm">Make a copy</span>
+            </button>
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@
     </aside>
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <TakeNote class="mx-auto mt-2 mb-8" />
-      <div class="grid gap-5 mt-2 mb-6" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
+      <div class="grid gap-5 mt-2 mb-20" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
         <NoteCard
           :ref="'note-'+ index"
           class="w-auto h-auto mx-auto"
@@ -195,13 +195,20 @@
           :index="index"
           :note="note"
           @open="openNote(index)"
+          @delete="deleteNote"
           @select="addNoteToSelected"
           @unselect="removeNoteFromSelected"
         />
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
         <div class="mx-auto my-64 w-full max-w-xl rounded-lg bg-black">
-          <NoteCard class="z-50" :note="selectedNote" :index="selectedNoteIndex" :isNoteOpened="isNoteOpened" @close="closeNote"/>
+          <NoteCard
+            class="z-50"
+            :note="selectedNote"
+            :index="selectedNoteIndex"
+            :isNoteOpened="isNoteOpened"
+            @close="closeNote"
+          />
         </div>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
@@ -299,6 +306,16 @@ export default {
     changeColor (obj) {
       this.selectedNotes.forEach(elem => {
         this.$refs['note-' + elem][0].changeColor(obj)
+      })
+      this.clearSelection()
+    },
+    deleteNote (id) {
+      const noteToDelete = this.notes.find(n => n.id === id)
+      this.$store.dispatch('deleteNote', noteToDelete)
+    },
+    deleteNotes () {
+      this.selectedNotes.forEach(elem => {
+        this.$refs['note-' + elem][0].deleteNote()
       })
       this.clearSelection()
     }

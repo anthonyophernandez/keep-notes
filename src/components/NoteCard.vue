@@ -111,15 +111,15 @@
             </div>
           </button>
           <div class="absolute z-40 w-24 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownMoreSection" @mouseleave="isShownMoreSection = false">
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Delete note</span>
-            </div>
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Add label</span>
-            </div>
-            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
-              <span class="ml-2 text-sm">Make a copy</span>
-            </div>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25" @click="deleteNote">
+              <span class="text-sm">Delete note</span>
+            </button>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="text-sm">Add label</span>
+            </button>
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="text-sm">Make a copy</span>
+            </button>
           </div>
         </div>
       </div>
@@ -183,6 +183,9 @@ export default {
     },
     deleteTag (index) {
       this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
+    },
+    deleteNote () {
+      this.$emit('delete', this.note.id)
     }
   }
 }
