@@ -146,12 +146,17 @@ export default new Vuex.Store({
   mutations: {
     DELETE_NOTE (state, note) {
       state.notes = state.notes.filter(n => n.id !== note.id)
+    },
+    COPY_NOTE (state, note) {
+      state.notes = [...[note], ...state.notes]
     }
   },
   actions: {
     deleteNote ({ commit }, note) {
       commit('DELETE_NOTE', note)
-      console.log('Deleted note: ' + note.id)
+    },
+    copyNote ({ commit }, note) {
+      commit('COPY_NOTE', note)
     }
   },
   modules: {

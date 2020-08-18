@@ -120,7 +120,7 @@
             <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
               <span class="text-sm">Add label</span>
             </button>
-            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25" @click="copyNotes">
               <span class="text-sm">Make a copy</span>
             </button>
           </div>
@@ -196,6 +196,7 @@
           :note="note"
           @open="openNote(index)"
           @delete="deleteNote"
+          @copy="copyNote"
           @select="addNoteToSelected"
           @unselect="removeNoteFromSelected"
         />
@@ -207,6 +208,8 @@
             :note="selectedNote"
             :index="selectedNoteIndex"
             :isNoteOpened="isNoteOpened"
+            @delete="deleteNote"
+            @copy="copyNote"
             @close="closeNote"
           />
         </div>
@@ -312,10 +315,26 @@ export default {
     deleteNote (id) {
       const noteToDelete = this.notes.find(n => n.id === id)
       this.$store.dispatch('deleteNote', noteToDelete)
+      if (this.isNoteOpened) {
+        this.closeNote()
+      }
     },
     deleteNotes () {
       this.selectedNotes.forEach(elem => {
         this.$refs['note-' + elem][0].deleteNote()
+      })
+      this.clearSelection()
+    },
+    copyNote (id) {
+      const noteToCopy = this.notes.find(n => n.id === id)
+      this.$store.dispatch('copyNote', noteToCopy)
+      if (this.isNoteOpened) {
+        this.closeNote()
+      }
+    },
+    copyNotes () {
+      this.selectedNotes.forEach(elem => {
+        this.$refs['note-' + elem][0].copyNote()
       })
       this.clearSelection()
     }

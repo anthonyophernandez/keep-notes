@@ -117,7 +117,7 @@
             <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
               <span class="text-sm">Add label</span>
             </button>
-            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25" @click="copyNote">
               <span class="text-sm">Make a copy</span>
             </button>
           </div>
@@ -186,6 +186,9 @@ export default {
     },
     deleteNote () {
       this.$emit('delete', this.note.id)
+    },
+    copyNote () {
+      this.$emit('copy', this.note.id)
     }
   }
 }
