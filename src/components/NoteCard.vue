@@ -42,7 +42,11 @@
         @mouseleave="hideClose('close-tag-' + index)"
       >
         <span class="cursor-pointer text-white text-xs">{{ tag }}</span>
-        <button :ref="'close-tag-' + index" class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none">
+        <button
+          :ref="'close-tag-' + index"
+          class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none"
+          @click="deleteTag(index)"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -162,6 +166,9 @@ export default {
     changeColor (obj) {
       this.note.currentColor = obj.selectedColor
       this.note.selectedIndexColor = obj.selectedIndexColor
+    },
+    deleteTag (index) {
+      this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
     }
   }
 }
