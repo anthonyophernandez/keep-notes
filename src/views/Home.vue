@@ -101,17 +101,30 @@
             <span class="text-xs text-white">Archive</span>
           </div>
         </button>
-        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('more')" @mouseleave="hideTooltip('more')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-dots-vertical" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="12" cy="19" r="1" />
-            <circle cx="12" cy="5" r="1" />
-          </svg>
-          <div ref="more" class="hidden absolute items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">More</span>
+        <div class="relative">
+          <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isShownMoreSection =! isShownMoreSection" @mouseover="showTooltip('more')" @mouseleave="hideTooltip('more')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-dots-vertical" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="19" r="1" />
+              <circle cx="12" cy="5" r="1" />
+            </svg>
+            <div ref="more" class="hidden absolute z-50 items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">More</span>
+            </div>
+          </button>
+          <div class="absolute z-40 w-24 -ml-16 py-1 bg-black text-white border rounded" v-if="isShownMoreSection" @mouseleave="isShownMoreSection = false">
+            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="ml-2 text-sm">Delete note</span>
+            </div>
+            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="ml-2 text-sm">Add label</span>
+            </div>
+            <div class="cursor-pointer hover:bg-gray-500 hover:bg-opacity-25">
+              <span class="ml-2 text-sm">Make a copy</span>
+            </div>
           </div>
-        </button>
+        </div>
       </div>
     </div>
     <aside class="fixed inset-y-0 left-0 mt-16 bg-black" :class="(isMenuDisplayed) ? 'w-64 z-50' : 'w-20'" @mouseover="isMenuDisplayed = true" @mouseleave="isMenuDisplayed = isMenuButtonPressed">
@@ -220,7 +233,8 @@ export default {
       selectedNoteIndex: -1,
       selectedNote: {},
       selectedNotes: [],
-      isShownColorSelector: false
+      isShownColorSelector: false,
+      isShownMoreSection: false
     }
   },
   computed: {
