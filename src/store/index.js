@@ -144,6 +144,9 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    ADD_NOTE (state, note) {
+      state.notes = [...[note], ...state.notes]
+    },
     DELETE_NOTE (state, note) {
       state.notes = state.notes.filter(n => n.id !== note.id)
     },
@@ -152,6 +155,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    addNote ({ commit }, note) {
+      commit('ADD_NOTE', note)
+    },
     deleteNote ({ commit }, note) {
       commit('DELETE_NOTE', note)
     },

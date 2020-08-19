@@ -38,12 +38,12 @@
         class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700"
         v-for="(tag, index) in note.tags"
         :key="index"
-        @mouseover="showClose('close-tag-' + index)"
-        @mouseleave="hideClose('close-tag-' + index)"
+        @mouseover="showClose('tag-' + index)"
+        @mouseleave="hideClose('tag-' + index)"
       >
         <span class="cursor-pointer text-white text-xs">{{ tag }}</span>
         <button
-          :ref="'close-tag-' + index"
+          :ref="'tag-' + index"
           class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none"
           @click="deleteTag(index)"
         >
