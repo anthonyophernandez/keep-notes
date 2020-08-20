@@ -214,6 +214,7 @@
             @delete="deleteNote"
             @copy="copyNote"
             @close="closeNote"
+            :labels="tags"
           />
         </div>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>

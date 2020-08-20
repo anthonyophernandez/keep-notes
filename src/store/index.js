@@ -166,6 +166,9 @@ export default new Vuex.Store({
     },
     COPY_NOTE (state, note) {
       state.notes = [...[note], ...state.notes]
+    },
+    ADD_LABEL (state, label) {
+      state.tags = [...[label], ...state.tags]
     }
   },
   actions: {
@@ -177,6 +180,9 @@ export default new Vuex.Store({
     },
     copyNote ({ commit }, note) {
       commit('COPY_NOTE', note)
+    },
+    addLabel ({ commit }, label) {
+      commit('ADD_LABEL', label)
     }
   },
   modules: {

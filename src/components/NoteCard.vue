@@ -121,23 +121,23 @@
               <span class="text-sm">Make a copy</span>
             </button>
           </div>
-          <div class="absolute z-40 w-48 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownLabelSection">
+          <div class="absolute z-40 w-48 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownLabelSection" @mouseleave="isShownLabelSection = false">
             <div class="w-full pl-2 pr-1 mb-3">
               <label for="label" class="text-sm">Label note</label>
               <input class="w-full bg-transparent text-xs" v-model="label" maxlength="50" name="label" id="label" type="text" placeholder="Enter label name">
             </div>
             <div v-for="(label, index) in labels" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
-              <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" type="checkbox" name="select-tag" id="select-tag">
-              <span class="w-full text-sm text-white" @click="selectTag(index)">{{ label.name }}</span>
+              <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" :checked="note.tags.indexOf(label.name) !== -1" type="checkbox" name="select-tag" id="select-tag">
+              <span class="w-full text-sm text-white" @click="selectTag(index, label)">{{ label.name }}</span>
             </div>
-            <div v-if="label.length > 0" class="relative w-full pt-1 px-1 text-white border-t">
-              <button class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1 focus:outline-none">
+            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
+              <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z"/>
                   <line x1="12" y1="5" x2="12" y2="19" />
                   <line x1="5" y1="12" x2="19" y2="12" />
                 </svg>
-              </button>
+              </div>
               <div class="ml-5 break-all text-xs font-semibold">Create "{{ label }} "</div>
             </div>
           </div>
@@ -218,8 +218,28 @@ export default {
       this.isShownMoreSection = false
       this.isShownLabelSection = true
     },
-    selectTag (index) {
+    selectTag (index, label) {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked
+      if (this.$refs['check-' + index][0].checked) {
+        // Add label
+        this.note.tags = [...[label.name], ...this.note.tags]
+      } else {
+        // Remove label
+        const i = this.note.tags.indexOf(label.name)
+        if (i !== -1) {
+          this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
+        }
+      }
+    },
+    createLabel () {
+      const newLabel = {
+        name: this.label
+      }
+      this.$store.dispatch('addLabel', newLabel)
+      this.note.tags = [...[newLabel.name], ...this.note.tags]
+      // Clear input
+      this.label = ''
+      this.isShownLabelSection = false
     }
   }
 }
