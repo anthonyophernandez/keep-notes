@@ -141,6 +141,20 @@ export default new Vuex.Store({
         currentColor: 'bg-black',
         selectedIndexColor: 1
       }
+    ],
+    tags: [
+      {
+        id: 1,
+        name: 'label 1'
+      },
+      {
+        id: 2,
+        name: 'label 2'
+      },
+      {
+        id: 3,
+        name: 'label 3'
+      }
     ]
   },
   mutations: {
