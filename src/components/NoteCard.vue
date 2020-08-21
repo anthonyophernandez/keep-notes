@@ -227,7 +227,7 @@ export default {
         // Remove label
         const i = this.note.tags.indexOf(label.name)
         if (i !== -1) {
-          this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
+          this.deleteTag(i)
         }
       }
     },

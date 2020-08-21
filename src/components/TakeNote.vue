@@ -17,6 +17,29 @@
       <textarea v-if="isVisible" v-model="title" class="resize-y h-auto w-full mb-2 bg-transparent text-white text-lg font-bold placeholder-gray-500 focus:outline-none" placeholder="Title" rows="2"></textarea>
       <textarea v-model="content" class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none" :class="(isVisible) ? 'h-auto resize-y font-normal text-base' : 'h-6 resize-none font-bold text-lg'" placeholder="Take a note..." :rows="(isVisible) ? '3' : '1'" ></textarea>
     </div>
+    <div class="w-full px-2 mb-2">
+      <div
+        class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700"
+        v-for="(tag, index) in tags"
+        :key="index"
+        @mouseover="showClose('tag-' + index)"
+        @mouseleave="hideClose('tag-' + index)"
+      >
+        <span class="cursor-pointer text-white text-xs">{{ tag }}</span>
+        <button
+          :ref="'tag-' + index"
+          class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none"
+          @click="deleteTag(index)"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <div v-if="isVisible" class="flex items-center justify-between w-full h-10 mt-2 mb-1 px-2">
       <div class="flex items-center">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
@@ -73,9 +96,29 @@
             </div>
           </button>
           <div class="absolute z-40 w-24 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownMoreSection" @mouseleave="isShownMoreSection = false">
-            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25">
+            <button class="w-full focus:outline-none hover:bg-gray-500 hover:bg-opacity-25" @click="openLabelSection">
               <span class="text-sm">Add label</span>
             </button>
+          </div>
+          <div class="absolute z-40 w-48 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownLabelSection" @mouseleave="isShownLabelSection = false">
+            <div class="w-full pl-2 pr-1 mb-3">
+              <label for="label" class="text-sm">Label note</label>
+              <input class="w-full bg-transparent text-xs" v-model="label" maxlength="50" name="label" id="label" type="text" placeholder="Enter label name">
+            </div>
+            <div v-for="(label, index) in labels" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
+              <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" type="checkbox" name="select-tag" id="select-tag">
+              <span class="w-full text-sm text-white" @click="selectTag(index, label)">{{ label.name }}</span>
+            </div>
+            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
+              <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z"/>
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </div>
+              <div class="ml-5 break-all text-xs font-semibold">Create "{{ label }} "</div>
+            </div>
           </div>
         </div>
       </div>
@@ -89,6 +132,7 @@ import ColorSelector from './ColorSelector.vue'
 
 export default {
   name: 'TakeNote',
+  props: ['labels'],
   components: {
     ColorSelector
   },
@@ -98,10 +142,13 @@ export default {
       isPinned: false,
       isShownMoreSection: false,
       isShownColorSelector: false,
+      isShownLabelSection: false,
       currentColor: 'bg-black',
       selectedIndexColor: 1,
       title: '',
-      content: ''
+      content: '',
+      label: '',
+      tags: []
     }
   },
   methods: {
@@ -112,6 +159,14 @@ export default {
     hideTooltip (elem) {
       this.$refs[elem].classList.remove('flex')
       this.$refs[elem].classList.add('hidden')
+    },
+    showClose (elem) {
+      this.$refs[elem][0].classList.remove('hidden')
+      this.$refs[elem][0].classList.add('flex')
+    },
+    hideClose (elem) {
+      this.$refs[elem][0].classList.remove('flex')
+      this.$refs[elem][0].classList.add('hidden')
     },
     changeColor (obj) {
       this.currentColor = obj.selectedColor
@@ -127,12 +182,13 @@ export default {
       this.content = ''
       this.currentColor = 'bg-black'
       this.selectedIndexColor = 1
+      this.tags = []
     },
     close () {
       const note = {
         title: this.title,
         content: this.content,
-        tags: [],
+        tags: this.tags,
         isPinned: this.isPinned,
         currentColor: this.currentColor,
         selectedIndexColor: this.selectedIndexColor
@@ -141,6 +197,36 @@ export default {
         this.$store.dispatch('addNote', note)
       }
       this.clear()
+    },
+    deleteTag (index) {
+      this.tags = [...this.tags.slice(0, index), ...this.tags.slice(index + 1)]
+    },
+    openLabelSection () {
+      this.isShownMoreSection = false
+      this.isShownLabelSection = true
+    },
+    selectTag (index, label) {
+      this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked
+      if (this.$refs['check-' + index][0].checked) {
+        // Add label
+        this.tags = [...[label.name], ...this.tags]
+      } else {
+        // Remove label
+        const i = this.tags.indexOf(label.name)
+        if (i !== -1) {
+          this.deleteTag(i)
+        }
+      }
+    },
+    createLabel () {
+      const newLabel = {
+        name: this.label
+      }
+      this.$store.dispatch('addLabel', newLabel)
+      this.tags = [...[newLabel.name], ...this.tags]
+      // Clear input
+      this.label = ''
+      this.isShownLabelSection = false
     }
   }
 }

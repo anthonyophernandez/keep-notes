@@ -187,7 +187,7 @@
       </div>
     </aside>
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
-      <TakeNote class="mx-auto mt-2 mb-8" />
+      <TakeNote class="mx-auto mt-2 mb-8" :labels="tags"/>
       <div class="grid gap-5 mt-2 mb-20" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
         <NoteCard
           :ref="'note-'+ index"
