@@ -109,7 +109,7 @@
               <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" type="checkbox" name="select-tag" id="select-tag">
               <span class="w-full text-sm text-white" @click="selectTag(index, label)">{{ label.name }}</span>
             </div>
-            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
+            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel(label)">
               <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -218,9 +218,9 @@ export default {
         }
       }
     },
-    createLabel () {
+    createLabel (label) {
       const newLabel = {
-        name: this.label
+        name: label
       }
       this.$store.dispatch('addLabel', newLabel)
       this.tags = [...[newLabel.name], ...this.tags]

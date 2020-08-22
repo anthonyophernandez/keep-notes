@@ -28,7 +28,7 @@
     <div class="w-full h-full pl-4 pr-10" @click="$emit('open')">
       <h2 class="text-base text-white break-words font-bold" :class="(isNoteOpened) ? 'mt-0' : 'mt-2'">{{ note.title }}</h2>
       <div class="mt-2">
-        <p class="text-sm text-white">
+        <p class="text-sm text-white break-all">
           {{ note.content }}
         </p>
       </div>
@@ -130,7 +130,7 @@
               <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" :checked="note.tags.indexOf(label.name) !== -1" type="checkbox" name="select-tag" id="select-tag">
               <span class="w-full text-sm text-white" @click="selectTag(index, label)">{{ label.name }}</span>
             </div>
-            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
+            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel(label)">
               <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -203,6 +203,9 @@ export default {
       this.note.currentColor = obj.selectedColor
       this.note.selectedIndexColor = obj.selectedIndexColor
     },
+    addTag (label) {
+      this.note.tags = [...[label], ...this.note.tags]
+    },
     deleteTag (index) {
       this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
     },
@@ -222,7 +225,7 @@ export default {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked
       if (this.$refs['check-' + index][0].checked) {
         // Add label
-        this.note.tags = [...[label.name], ...this.note.tags]
+        this.addTag(label.name)
       } else {
         // Remove label
         const i = this.note.tags.indexOf(label.name)
@@ -231,12 +234,12 @@ export default {
         }
       }
     },
-    createLabel () {
+    createLabel (label) {
       const newLabel = {
-        name: this.label
+        name: label
       }
       this.$store.dispatch('addLabel', newLabel)
-      this.note.tags = [...[newLabel.name], ...this.note.tags]
+      this.addTag(newLabel.name)
       // Clear input
       this.label = ''
       this.isShownLabelSection = false
