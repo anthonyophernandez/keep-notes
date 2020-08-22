@@ -25,13 +25,17 @@
         </div>
       </button>
     </div>
-    <div class="w-full h-full pl-4 pr-10" @click="$emit('open')">
+    <div v-if="!isNoteOpened" class="w-full h-full pl-4 pr-10" @click="$emit('open')">
       <h2 class="text-base text-white break-words font-bold" :class="(isNoteOpened) ? 'mt-0' : 'mt-2'">{{ note.title }}</h2>
       <div class="mt-2">
         <p class="text-sm text-white break-all">
           {{ note.content }}
         </p>
       </div>
+    </div>
+    <div v-else class="w-full h-full my-2 pl-4 pr-10">
+      <textarea v-model="note.title" class="resize-y h-auto w-full mb-2 bg-transparent text-white text-lg font-bold placeholder-gray-500 focus:outline-none" placeholder="Title" rows="2"></textarea>
+      <textarea v-model="note.content" class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none" placeholder="Take a note..." rows="3" ></textarea>
     </div>
     <div class="w-full px-2 mb-2" :class="(isNoteOpened) ? 'mt-4' : 'mt-0'">
       <div
@@ -143,7 +147,7 @@
           </div>
         </div>
       </div>
-      <button v-show="isNoteOpened" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="$emit('close')">Close</button>
+      <button v-show="isNoteOpened" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="close">Close</button>
     </div>
   </div>
 </template>
@@ -243,6 +247,9 @@ export default {
       // Clear input
       this.label = ''
       this.isShownLabelSection = false
+    },
+    close () {
+      this.$emit('close')
     }
   }
 }

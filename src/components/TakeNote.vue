@@ -39,7 +39,6 @@
         </button>
       </div>
     </div>
-
     <div v-if="isVisible" class="flex items-center justify-between w-full h-10 mt-2 mb-1 px-2">
       <div class="flex items-center">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
