@@ -41,16 +41,35 @@
     </div>
     <div v-if="isVisible" class="flex items-center justify-between w-full h-10 mt-2 mb-1 px-2">
       <div class="flex items-center">
-        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-          </svg>
-          <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Remind me</span>
+        <div class="relative">
+          <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isShownReminderSection = true" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">Remind me</span>
+            </div>
+          </button>
+          <div class="absolute z-40 w-48 py-1 bg-black text-white border rounded" v-if="isShownReminderSection" @mouseleave="isShownReminderSection = false">
+            <div class="w-full px-2 py-2 ">
+              <span>Reminder:</span>
+            </div>
+            <div class="cursor-pointer flex items-center justify-between w-full px-2 py-2 hover:bg-white hover:bg-opacity-25 text-sm">
+              <span>Later today</span>
+              <span class="text-gray-500">8:00 AM</span>
+            </div>
+            <div class="cursor-pointer flex items-center justify-between w-full px-2 py-2 hover:bg-white hover:bg-opacity-25 text-sm">
+              <span>Tomorrow</span>
+              <span class="text-gray-500">8:00 AM</span>
+            </div>
+            <div class="cursor-pointer flex items-center justify-between w-full px-2 py-2 hover:bg-white hover:bg-opacity-25 text-sm">
+              <span>Next week</span>
+              <span class="text-gray-500">Mon, 8:00 PM</span>
+            </div>
           </div>
-        </button>
+        </div>
         <div class="relative">
           <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" :selectedIndexColor="selectedIndexColor" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
           <button
@@ -139,6 +158,7 @@ export default {
     return {
       isVisible: false,
       isPinned: false,
+      isShownReminderSection: false,
       isShownMoreSection: false,
       isShownColorSelector: false,
       isShownLabelSection: false,
