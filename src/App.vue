@@ -4,6 +4,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+  created () {
+    this.$store.dispatch('loadAllNotes')
+  }
+}
+</script>script
+
 <style lang="scss">
   html, body {
     margin: 0;
