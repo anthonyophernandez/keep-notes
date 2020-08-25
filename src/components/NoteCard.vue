@@ -248,9 +248,11 @@ export default {
     },
     addTag (label) {
       this.note.tags = [...[label], ...this.note.tags]
+      this.$store.dispatch('updateNote', this.note)
     },
     deleteTag (index) {
       this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
+      this.$store.dispatch('updateNote', this.note)
     },
     selectTag (index, label) {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked

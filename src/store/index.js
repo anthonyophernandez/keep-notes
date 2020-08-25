@@ -8,20 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     notes: [],
-    tags: [
-      {
-        id: 1,
-        name: 'label 1'
-      },
-      {
-        id: 2,
-        name: 'label 2'
-      },
-      {
-        id: 3,
-        name: 'label 3'
-      }
-    ]
+    tags: []
   },
   mutations: {
     SET_NOTES (state, notes) {
@@ -44,18 +31,27 @@ export default new Vuex.Store({
     },
     ADD_LABEL (state, label) {
       state.tags = [...[label], ...state.tags]
+    },
+    SET_TAGS (state, tags) {
+      state.tags = tags
     }
   },
   actions: {
     async loadAllNotes ({ commit }) {
       const response = await Api().get('/api/notes')
-      const notes = response.data
-      commit('SET_NOTES', notes)
+      const notes = response.data.data
+      notes.forEach(n => {
+        n.attributes.id = n.id
+        n.attributes.tagIds = n.relationships.tags.data.map(t => t.id)
+      })
+      commit('SET_NOTES', notes.map(n => n.attributes))
     },
     async createNote ({ commit }, note) {
       const response = await Api().post('/api/notes', note)
-      const savedNote = response.data
-      commit('ADD_NOTE', savedNote)
+      const savedNote = response.data.data
+      savedNote.attributes.id = savedNote.id
+      savedNote.attributes.tagIds = []
+      commit('ADD_NOTE', savedNote.attributes)
     },
     async updateNote ({ commit }, note) {
       Api().put(`/api/notes/${note.id}`, note)
@@ -67,6 +63,15 @@ export default new Vuex.Store({
     },
     addLabel ({ commit }, label) {
       commit('ADD_LABEL', label)
+    },
+    async loadAllTags ({ commit }) {
+      const response = await Api().get('/api/tags')
+      const tags = response.data.data
+      tags.forEach(t => {
+        t.attributes.id = t.id
+        t.attributes.noteIds = t.relationships.notes.data.map(n => n.id)
+      })
+      commit('SET_TAGS', tags.map(t => t.attributes))
     }
   },
   modules: {

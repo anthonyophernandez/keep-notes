@@ -9,6 +9,7 @@ export default {
   name: 'App',
   created () {
     this.$store.dispatch('loadAllNotes')
+    this.$store.dispatch('loadAllTags')
   }
 }
 </script>script

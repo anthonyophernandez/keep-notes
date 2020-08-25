@@ -1,26 +1,51 @@
-import { Server } from 'miragejs'
+import { Server, JSONAPISerializer, Model, hasMany } from 'miragejs'
+import { camelCase } from 'lodash'
 import notesJSON from './notes.json'
+import tagsJSON from './tags.json'
 
 export default function () {
-  const server = new Server()
+  const server = new Server({
+    serializers: {
+      application: JSONAPISerializer,
+      note: JSONAPISerializer.extend({
+        include: ['tags'],
+        keyForAttribute (attr) {
+          return camelCase(attr)
+        }
+      }),
+      tag: JSONAPISerializer.extend({
+        include: ['notes'],
+        keyForAttribute (attr) {
+          return camelCase(attr)
+        }
+      })
+    },
+    models: {
+      note: Model.extend({
+        tags: hasMany()
+      }),
+      tag: Model.extend({
+        notes: hasMany()
+      })
+    },
+    fixtures: {
+      notes: notesJSON,
+      tags: tagsJSON
+    }
+  })
 
   server.namespace = 'api'
 
-  server.get('/notes', ({ db }, request) => db.notes)
-
-  server.post('/notes', (schema, request) => {
-    const note = JSON.parse(request.requestBody)
-
-    return schema.db.notes.insert(note)
-  })
-
-  server.delete('/notes/:id', (schema, request) => {
-    return schema.db.notes.remove(request.params.id)
-  })
-
+  server.get('/notes')
+  server.delete('/notes/:id')
   server.put('/notes/:id', function () {
     return new Response(200)
   })
+  server.post('/notes', (schema, request) => {
+    const json = JSON.parse(request.requestBody)
+    const response = schema.notes.create(json)
+    return response
+  })
 
-  server.db.loadData({ notes: notesJSON })
+  server.get('/tags')
 }
