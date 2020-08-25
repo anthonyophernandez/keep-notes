@@ -30,11 +30,17 @@ export default new Vuex.Store({
     ADD_NOTE (state, note) {
       state.notes = [...[note], ...state.notes]
     },
+    UPDATE_NOTE (state, note) {
+      const noteToUpdate = state.notes.find(n => n.id === note.id)
+      noteToUpdate.title = note.title
+      noteToUpdate.content = note.content
+      noteToUpdate.tags = note.tags
+      noteToUpdate.isPinned = note.isPinned
+      noteToUpdate.currentColor = note.currentColor
+      noteToUpdate.selectedIndexColor = note.selectedIndexColor
+    },
     DELETE_NOTE (state, note) {
       state.notes = state.notes.filter(n => n.id !== note.id)
-    },
-    COPY_NOTE (state, note) {
-      state.notes = [...[note], ...state.notes]
     },
     ADD_LABEL (state, label) {
       state.tags = [...[label], ...state.tags]
@@ -46,14 +52,18 @@ export default new Vuex.Store({
       const notes = response.data
       commit('SET_NOTES', notes)
     },
-    addNote ({ commit }, note) {
-      commit('ADD_NOTE', note)
+    async createNote ({ commit }, note) {
+      const response = await Api().post('/api/notes', note)
+      const savedNote = response.data
+      commit('ADD_NOTE', savedNote)
+    },
+    async updateNote ({ commit }, note) {
+      Api().put(`/api/notes/${note.id}`, note)
+      commit('UPDATE_NOTE', note)
     },
     deleteNote ({ commit }, note) {
+      Api().delete(`/api/notes/${note.id}`, note)
       commit('DELETE_NOTE', note)
-    },
-    copyNote ({ commit }, note) {
-      commit('COPY_NOTE', note)
     },
     addLabel ({ commit }, label) {
       commit('ADD_LABEL', label)

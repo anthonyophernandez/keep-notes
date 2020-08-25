@@ -213,7 +213,7 @@ export default {
         selectedIndexColor: this.selectedIndexColor
       }
       if (this.title.length > 0 || this.content.length > 0) {
-        this.$store.dispatch('addNote', note)
+        this.$store.dispatch('createNote', note)
       }
       this.clear()
     },

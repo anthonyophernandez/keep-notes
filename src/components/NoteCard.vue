@@ -217,33 +217,40 @@ export default {
     },
     pinNote () {
       this.note.isPinned = !this.note.isPinned
-      if (this.note.isPinned) {
-        this.$emit('pin', this.index)
-      } else {
-        this.$emit('unpin', this.index)
-      }
+      this.$store.dispatch('updateNote', this.note)
     },
     changeColor (obj) {
       this.note.currentColor = obj.selectedColor
       this.note.selectedIndexColor = obj.selectedIndexColor
+      this.$store.dispatch('updateNote', this.note)
+    },
+    deleteNote () {
+      this.$store.dispatch('deleteNote', this.note)
+      this.$emit('close')
+      this.isShownMoreSection = false
+    },
+    copyNote () {
+      const newNote = {
+        title: this.note.title,
+        content: this.note.content,
+        tags: this.note.tags,
+        isPinned: this.note.isPinned,
+        currentColor: this.note.currentColor,
+        selectedIndexColor: this.note.selectedIndexColor
+      }
+      this.$store.dispatch('createNote', newNote)
+      this.$emit('close')
+      this.isShownMoreSection = false
+    },
+    openLabelSection () {
+      this.isShownMoreSection = false
+      this.isShownLabelSection = true
     },
     addTag (label) {
       this.note.tags = [...[label], ...this.note.tags]
     },
     deleteTag (index) {
       this.note.tags = [...this.note.tags.slice(0, index), ...this.note.tags.slice(index + 1)]
-    },
-    deleteNote () {
-      this.$emit('delete', this.note.id)
-      this.isShownMoreSection = false
-    },
-    copyNote () {
-      this.$emit('copy', this.note.id)
-      this.isShownMoreSection = false
-    },
-    openLabelSection () {
-      this.isShownMoreSection = false
-      this.isShownLabelSection = true
     },
     selectTag (index, label) {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked

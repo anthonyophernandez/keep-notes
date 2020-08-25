@@ -236,10 +236,9 @@
           :index="index"
           :note="note"
           @open="openNote(index)"
-          @delete="deleteNote"
-          @copy="copyNote"
           @select="addNoteToSelected"
           @unselect="removeNoteFromSelected"
+          @close="closeNote"
           :labels="tags"
         />
       </div>
@@ -250,8 +249,6 @@
             :note="selectedNote"
             :index="selectedNoteIndex"
             :isNoteOpened="isNoteOpened"
-            @delete="deleteNote"
-            @copy="copyNote"
             @close="closeNote"
             :labels="tags"
           />
@@ -359,25 +356,11 @@ export default {
       })
       this.clearSelection()
     },
-    deleteNote (id) {
-      const noteToDelete = this.notes.find(n => n.id === id)
-      this.$store.dispatch('deleteNote', noteToDelete)
-      if (this.isNoteOpened) {
-        this.closeNote()
-      }
-    },
     deleteNotes () {
       this.selectedNotes.forEach(elem => {
         this.$refs['note-' + elem][0].deleteNote()
       })
       this.clearSelection()
-    },
-    copyNote (id) {
-      const noteToCopy = this.notes.find(n => n.id === id)
-      this.$store.dispatch('copyNote', noteToCopy)
-      if (this.isNoteOpened) {
-        this.closeNote()
-      }
     },
     copyNotes () {
       this.selectedNotes.forEach(elem => {
