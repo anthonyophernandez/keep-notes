@@ -15,13 +15,13 @@ export default new Vuex.Store({
       state.notes = notes
     },
     ADD_NOTE (state, note) {
-      state.notes = [...[note], ...state.notes]
+      state.notes = [note].concat(state.notes)
     },
     UPDATE_NOTE (state, note) {
       const noteToUpdate = state.notes.find(n => n.id === note.id)
       noteToUpdate.title = note.title
       noteToUpdate.content = note.content
-      noteToUpdate.tags = note.tags
+      noteToUpdate.tagIds = note.tagIds
       noteToUpdate.isPinned = note.isPinned
       noteToUpdate.currentColor = note.currentColor
       noteToUpdate.selectedIndexColor = note.selectedIndexColor
@@ -30,7 +30,7 @@ export default new Vuex.Store({
       state.notes = state.notes.filter(n => n.id !== note.id)
     },
     ADD_LABEL (state, label) {
-      state.tags = [...[label], ...state.tags]
+      state.tags = [label].concat(state.tags)
     },
     SET_TAGS (state, tags) {
       state.tags = tags
@@ -50,7 +50,7 @@ export default new Vuex.Store({
       const response = await Api().post('/api/notes', note)
       const savedNote = response.data.data
       savedNote.attributes.id = savedNote.id
-      savedNote.attributes.tagIds = []
+      savedNote.attributes.tagIds = savedNote.relationships.tags.data.map(t => t.id)
       commit('ADD_NOTE', savedNote.attributes)
     },
     async updateNote ({ commit }, note) {
@@ -61,9 +61,6 @@ export default new Vuex.Store({
       Api().delete(`/api/notes/${note.id}`, note)
       commit('DELETE_NOTE', note)
     },
-    addLabel ({ commit }, label) {
-      commit('ADD_LABEL', label)
-    },
     async loadAllTags ({ commit }) {
       const response = await Api().get('/api/tags')
       const tags = response.data.data
@@ -72,8 +69,19 @@ export default new Vuex.Store({
         t.attributes.noteIds = t.relationships.notes.data.map(n => n.id)
       })
       commit('SET_TAGS', tags.map(t => t.attributes))
+    },
+    async createLabel ({ commit }, label) {
+      const response = await Api().post('/api/tags', label)
+      const savedTag = response.data.data
+      savedTag.attributes.id = savedTag.id
+      savedTag.attributes.noteIds = savedTag.relationships.notes.data.map(n => n.id)
+      commit('ADD_LABEL', savedTag.attributes)
+      return savedTag.attributes
     }
   },
-  modules: {
+  getters: {
+    getTag: state => id => {
+      return state.tags.find(t => t.id === id)
+    }
   }
 })

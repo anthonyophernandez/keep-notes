@@ -20,16 +20,16 @@
     <div class="w-full px-2 mb-2">
       <div
         class="relative inline-block mx-1 mb-1 px-2 rounded-full border border-gray-700"
-        v-for="(tag, index) in tags"
+        v-for="(tagId, index) in noteTagIds"
         :key="index"
         @mouseover="showClose('tag-' + index)"
         @mouseleave="hideClose('tag-' + index)"
       >
-        <span class="cursor-pointer text-white text-xs">{{ tag }}</span>
+        <span class="cursor-pointer text-white text-xs">{{ getTag(tagId).name }}</span>
         <button
           :ref="'tag-' + index"
           class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none"
-          @click="deleteTag(index)"
+          @click="deleteTagFromNote(tagId)"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -123,9 +123,9 @@
               <label for="label" class="text-sm">Label note</label>
               <input class="w-full bg-transparent text-xs" v-model="label" maxlength="50" name="label" id="label" type="text" placeholder="Enter label name">
             </div>
-            <div v-for="(label, index) in labels" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
+            <div v-for="(tag, index) in tags" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
               <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" type="checkbox" name="select-tag" id="select-tag">
-              <span class="w-full text-sm text-white" @click="selectTag(index, label)">{{ label.name }}</span>
+              <span class="w-full text-sm text-white" @click="selectTag(index, tag)">{{ tag.name }}</span>
             </div>
             <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel(label)">
               <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
@@ -146,11 +146,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ColorSelector from './ColorSelector.vue'
 
 export default {
   name: 'TakeNote',
-  props: ['labels'],
+  props: ['tags'],
   components: {
     ColorSelector
   },
@@ -167,8 +168,13 @@ export default {
       title: '',
       content: '',
       label: '',
-      tags: []
+      noteTagIds: []
     }
+  },
+  computed: {
+    ...mapGetters({
+      getTag: 'getTag'
+    })
   },
   methods: {
     showTooltip (elem) {
@@ -201,13 +207,13 @@ export default {
       this.content = ''
       this.currentColor = 'bg-black'
       this.selectedIndexColor = 1
-      this.tags = []
+      this.noteTagIds = []
     },
     close () {
       const note = {
         title: this.title,
         content: this.content,
-        tags: this.tags,
+        tagIds: this.noteTagIds,
         isPinned: this.isPinned,
         currentColor: this.currentColor,
         selectedIndexColor: this.selectedIndexColor
@@ -217,8 +223,11 @@ export default {
       }
       this.clear()
     },
-    deleteTag (index) {
-      this.tags = [...this.tags.slice(0, index), ...this.tags.slice(index + 1)]
+    addTagToNote (tagId) {
+      this.noteTagIds = [tagId].concat(this.noteTagIds)
+    },
+    deleteTagFromNote (tagId) {
+      this.noteTagIds = this.noteTagIds.filter(tId => tId.toString() !== tagId.toString())
     },
     openLabelSection () {
       this.isShownMoreSection = false
@@ -228,21 +237,18 @@ export default {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked
       if (this.$refs['check-' + index][0].checked) {
         // Add label
-        this.tags = [...[label.name], ...this.tags]
+        this.addTagToNote(label.id)
       } else {
         // Remove label
-        const i = this.tags.indexOf(label.name)
-        if (i !== -1) {
-          this.deleteTag(i)
-        }
+        this.deleteTagFromNote(label.id)
       }
     },
-    createLabel (label) {
+    async createLabel (label) {
       const newLabel = {
         name: label
       }
-      this.$store.dispatch('addLabel', newLabel)
-      this.tags = [...[newLabel.name], ...this.tags]
+      const tag = await this.$store.dispatch('createLabel', newLabel)
+      this.addTagToNote(tag.id)
       // Clear input
       this.label = ''
       this.isShownLabelSection = false

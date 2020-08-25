@@ -226,7 +226,7 @@
       </div>
     </aside>
     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
-      <TakeNote class="mx-auto mt-2 mb-8" :labels="tags"/>
+      <TakeNote class="mx-auto mt-2 mb-8" :tags="tags"/>
       <div class="grid gap-5 mt-2 mb-20" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
         <NoteCard
           :ref="'note-'+ index"
@@ -239,7 +239,7 @@
           @select="addNoteToSelected"
           @unselect="removeNoteFromSelected"
           @close="closeNote"
-          :labels="tags"
+          :tags="tags"
         />
       </div>
       <div v-show="isNoteOpened" class="fixed z-40 inset-0">
@@ -250,7 +250,7 @@
             :index="selectedNoteIndex"
             :isNoteOpened="isNoteOpened"
             @close="closeNote"
-            :labels="tags"
+            :tags="tags"
           />
         </div>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
@@ -377,14 +377,15 @@ export default {
       if (this.$refs['check-' + index][0].checked) {
         // Add label
         this.selectedNotes.forEach(elem => {
-          if (this.$refs['note-' + elem][0].note.tags.indexOf(label.name) === -1) {
-            this.$refs['note-' + elem][0].addTag(label.name)
+          if (this.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) === -1) {
+            this.$refs['note-' + elem][0].addTagToNote(label.id)
           }
         })
       } else {
+        // Remove label
         this.selectedNotes.forEach(elem => {
-          if (this.$refs['note-' + elem][0].note.tags.indexOf(label.name) !== -1) {
-            this.$refs['note-' + elem][0].deleteTag(index)
+          if (this.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) !== -1) {
+            this.$refs['note-' + elem][0].deleteTagFromNote(label.id)
           }
         })
       }

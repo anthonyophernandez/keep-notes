@@ -7,9 +7,9 @@
 <script>
 export default {
   name: 'App',
-  created () {
-    this.$store.dispatch('loadAllNotes')
-    this.$store.dispatch('loadAllTags')
+  async created () {
+    await this.$store.dispatch('loadAllTags')
+    await this.$store.dispatch('loadAllNotes')
   }
 }
 </script>script
