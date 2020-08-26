@@ -18,13 +18,9 @@ export default new Vuex.Store({
       state.notes = [note].concat(state.notes)
     },
     UPDATE_NOTE (state, note) {
-      const noteToUpdate = state.notes.find(n => n.id === note.id)
-      noteToUpdate.title = note.title
-      noteToUpdate.content = note.content
-      noteToUpdate.tagIds = note.tagIds
-      noteToUpdate.isPinned = note.isPinned
-      noteToUpdate.currentColor = note.currentColor
-      noteToUpdate.selectedIndexColor = note.selectedIndexColor
+      state.notes.forEach(n => {
+        n = note
+      })
     },
     DELETE_NOTE (state, note) {
       state.notes = state.notes.filter(n => n.id !== note.id)
@@ -34,6 +30,14 @@ export default new Vuex.Store({
     },
     SET_TAGS (state, tags) {
       state.tags = tags
+    },
+    CONNECT_TAG_TO_NOTE (state, { note, tag }) {
+      note.tagIds.unshift(tag.id.toString())
+      tag.noteIds = tag.noteIds.concat(note.id.toString())
+    },
+    DISCONNECT_TAG_FROM_NOTE (state, { note, tag }) {
+      note.tagIds = note.tagIds.filter(t => t !== tag.id)
+      tag.noteIds = tag.noteIds.filter(n => n !== note.id)
     }
   },
   actions: {
@@ -54,12 +58,14 @@ export default new Vuex.Store({
       commit('ADD_NOTE', savedNote.attributes)
     },
     async updateNote ({ commit }, note) {
-      Api().put(`/api/notes/${note.id}`, note)
+      await Api().put(`/api/notes/${note.id}`, note)
       commit('UPDATE_NOTE', note)
     },
-    deleteNote ({ commit }, note) {
-      Api().delete(`/api/notes/${note.id}`, note)
-      commit('DELETE_NOTE', note)
+    async deleteNote ({ commit }, note) {
+      const response = await Api().delete(`/api/notes/${note.id}`, note)
+      if (response.status === 200 || response.status === 204) {
+        commit('DELETE_NOTE', note)
+      }
     },
     async loadAllTags ({ commit }) {
       const response = await Api().get('/api/tags')
@@ -77,6 +83,20 @@ export default new Vuex.Store({
       savedTag.attributes.noteIds = savedTag.relationships.notes.data.map(n => n.id)
       commit('ADD_LABEL', savedTag.attributes)
       return savedTag.attributes
+    },
+    async connectTagToNote ({ commit }, { note, tag }) {
+      await Api().post('/api/note_tags', {
+        noteId: note.id,
+        tagId: tag.id
+      })
+      commit('CONNECT_TAG_TO_NOTE', { note, tag })
+    },
+    async disconnectTagFromNote ({ commit }, { note, tag }) {
+      await Api().post('/api/note_tags/delete', {
+        noteId: note.id,
+        tagId: tag.id
+      })
+      commit('DISCONNECT_TAG_FROM_NOTE', { note, tag })
     }
   },
   getters: {

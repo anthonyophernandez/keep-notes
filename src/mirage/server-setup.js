@@ -53,4 +53,11 @@ export default function () {
     const response = schema.tags.create(json)
     return response
   })
+
+  server.post('/note_tags', function () {
+    return new Response(201)
+  })
+  server.post('/note_tags/delete', function () {
+    return new Response(200)
+  })
 }

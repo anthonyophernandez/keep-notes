@@ -254,12 +254,12 @@ export default {
       this.isShownLabelSection = true
     },
     addTagToNote (tagId) {
-      this.note.tagIds = [tagId].concat(this.note.tagIds)
-      this.$store.dispatch('updateNote', this.note)
+      const tag = this.getTag(tagId)
+      this.$store.dispatch('connectTagToNote', { note: this.note, tag: tag })
     },
     deleteTagFromNote (tagId) {
-      this.note.tagIds = this.note.tagIds.filter(tId => tId.toString() !== tagId.toString())
-      this.$store.dispatch('updateNote', this.note)
+      const tag = this.getTag(tagId)
+      this.$store.dispatch('disconnectTagFromNote', { note: this.note, tag: tag })
     },
     selectTag (index, label) {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked
@@ -282,6 +282,7 @@ export default {
       this.isShownLabelSection = false
     },
     close () {
+      this.$store.dispatch('updateNote', this.note)
       this.$emit('close')
     }
   }

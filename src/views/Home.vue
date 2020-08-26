@@ -278,7 +278,7 @@ export default {
       isDisplayedGrid: false,
       isMenuDisplayed: false,
       isMenuButtonPressed: false,
-      isSectionSelected: 1,
+      isSectionSelected: '1',
       isNoteOpened: false,
       selectedNoteIndex: -1,
       selectedNote: {},
