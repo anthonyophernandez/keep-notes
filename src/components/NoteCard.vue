@@ -110,7 +110,7 @@
             </div>
           </button>
         </div>
-        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('archive')" @mouseleave="hideTooltip('archive')">
+        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(note.isArchived) ? 'text-white' : 'text-gray-600'" @click="archiveNote" @mouseover="showTooltip('archive')" @mouseleave="hideTooltip('archive')">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-archive" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <rect x="3" y="4" width="18" height="4" rx="2" />
@@ -118,7 +118,8 @@
             <line x1="10" y1="12" x2="14" y2="12" />
           </svg>
           <div ref="archive" class="hidden absolute items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Archive</span>
+            <span v-show="!note.isArchived" class="text-xs text-white">Archive</span>
+            <span v-show="note.isArchived" class="text-xs text-white">Unarchive</span>
           </div>
         </button>
         <div class="relative">
@@ -221,6 +222,9 @@ export default {
       } else {
         this.$emit('unselect', this.index)
       }
+    },
+    archiveNote () {
+      this.note.isArchived = !this.note.isArchived
     },
     pinNote () {
       this.note.isPinned = !this.note.isPinned

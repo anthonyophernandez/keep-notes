@@ -109,7 +109,7 @@
           </button>
           <ColorSelector v-if="isShownColorSelector" class="absolute -mb-24 -ml-6" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
         </div>
-        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('archive')" @mouseleave="hideTooltip('archive')">
+        <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="archiveNotes" @mouseover="showTooltip('archive')" @mouseleave="hideTooltip('archive')">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-archive" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <rect x="3" y="4" width="18" height="4" rx="2" />
@@ -333,6 +333,12 @@ export default {
         this.$refs['note-' + ele][0].selectNote()
       })
       this.selectedNotes = []
+    },
+    archiveNotes () {
+      this.selectedNotes.forEach(elem => {
+        this.$refs['note-' + elem][0].archiveNote()
+      })
+      this.clearSelection()
     },
     pinNotes () {
       this.selectedNotes.forEach(elem => {
