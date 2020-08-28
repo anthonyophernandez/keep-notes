@@ -38,7 +38,7 @@
     <div v-show="selectedNotes.length > 0" class="absolute inset-x-0 top-0 z-50 flex items-center justify-between h-16 bg-black border-b border-gray-700">
       <div class="flex items-center ml-5">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="clearSelection" @mouseover="showTooltip('clear-selection')" @mouseleave="hideTooltip('clear-selection')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-6 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-x" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
@@ -195,7 +195,7 @@
             <span v-show="isMenuDisplayed">{{ tag.name }}</span>
           </button>
         </div>
-        <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('4')]" @click="isSectionSelected = '4'">
+        <button class="flex items-center h-12 text-white focus:outline-none hover:bg-gray-600 hover:bg-opacity-25" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full']" @click="openEditLabelsModal">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-pencil" :class="(isMenuDisplayed) ? 'mx-6' : ''" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -255,6 +255,7 @@
         </div>
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
+      <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
     </main>
   </div>
 </template>
@@ -264,6 +265,8 @@ import NoteCard from '../components/NoteCard.vue'
 import TakeNote from '../components/TakeNote.vue'
 import ColorSelector from '../components/ColorSelector.vue'
 
+import EditLabelsModal from '../components/EditLabelsModal.vue'
+
 import { mapState } from 'vuex'
 
 export default {
@@ -271,13 +274,15 @@ export default {
   components: {
     NoteCard,
     TakeNote,
-    ColorSelector
+    ColorSelector,
+    EditLabelsModal
   },
   data () {
     return {
       isDisplayedGrid: false,
       isMenuDisplayed: false,
       isMenuButtonPressed: false,
+      isEditLabelsModalOpened: false,
       isSectionSelected: '1',
       isNoteOpened: false,
       selectedNoteIndex: -1,
@@ -302,6 +307,10 @@ export default {
     },
     toggleMenu () {
       this.isMenuButtonPressed = !this.isMenuButtonPressed
+      this.isMenuDisplayed = !this.isMenuDisplayed
+    },
+    openEditLabelsModal () {
+      this.isEditLabelsModalOpened = true
       this.isMenuDisplayed = !this.isMenuDisplayed
     },
     openNote (index) {
