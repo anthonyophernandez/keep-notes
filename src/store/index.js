@@ -28,6 +28,9 @@ export default new Vuex.Store({
     ADD_LABEL (state, label) {
       state.tags = [label].concat(state.tags)
     },
+    DELETE_LABEL (state, label) {
+      state.tags = state.tags.filter(t => t.id !== label.id)
+    },
     SET_TAGS (state, tags) {
       state.tags = tags
     },
@@ -84,6 +87,12 @@ export default new Vuex.Store({
       commit('ADD_LABEL', savedTag.attributes)
       return savedTag.attributes
     },
+    async deleteTag ({ commit }, tag) {
+      const response = await Api().delete(`/api/tags/${tag.id}`, tag)
+      if (response.status === 200 || response.status === 204) {
+        commit('DELETE_LABEL', tag)
+      }
+    },
     async connectTagToNote ({ commit }, { note, tag }) {
       await Api().post('/api/note_tags', {
         noteId: note.id,
@@ -102,6 +111,9 @@ export default new Vuex.Store({
   getters: {
     getTag: state => id => {
       return state.tags.find(t => t.id === id)
+    },
+    getNote: state => id => {
+      return state.notes.find(n => n.id === id)
     }
   }
 })
