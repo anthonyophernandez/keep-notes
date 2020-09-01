@@ -49,6 +49,9 @@ export default function () {
 
   server.get('/tags')
   server.delete('/tags/:id')
+  server.put('/tags/:id', function () {
+    return new Response(200)
+  })
   server.post('/tags', (schema, request) => {
     const json = JSON.parse(request.requestBody)
     const response = schema.tags.create(json)

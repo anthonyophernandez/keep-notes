@@ -19,7 +19,9 @@ export default new Vuex.Store({
     },
     UPDATE_NOTE (state, note) {
       state.notes.forEach(n => {
-        n = note
+        if (n.id === note.id) {
+          n = note
+        }
       })
     },
     DELETE_NOTE (state, note) {
@@ -30,6 +32,13 @@ export default new Vuex.Store({
     },
     DELETE_LABEL (state, label) {
       state.tags = state.tags.filter(t => t.id !== label.id)
+    },
+    UPDATE_LABEL (state, label) {
+      state.tags.forEach(t => {
+        if (t.id === label.id) {
+          t = label
+        }
+      })
     },
     SET_TAGS (state, tags) {
       state.tags = tags
@@ -92,6 +101,10 @@ export default new Vuex.Store({
       if (response.status === 200 || response.status === 204) {
         commit('DELETE_LABEL', tag)
       }
+    },
+    async updateTag ({ commit }, tag) {
+      await Api().put(`/api/tags/${tag.id}`, tag)
+      commit('UPDATE_LABEL', tag)
     },
     async connectTagToNote ({ commit }, { note, tag }) {
       await Api().post('/api/note_tags', {

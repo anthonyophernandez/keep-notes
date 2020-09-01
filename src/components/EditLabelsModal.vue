@@ -58,9 +58,9 @@
             <span class="text-xs text-white">Delete label</span>
           </div>
         </button>
-        <span :ref="'labelName-' + index" class="cursor-text w-48 ml-3" @click="editStatus(index, true, label.name)">{{ label.name }}</span>
+        <span :ref="'labelName-' + index" class="cursor-text w-48 ml-3" @click="editStatus(index, true, label)">{{ label.name }}</span>
         <input :ref="'inputName-' + index" class="hidden w-48 ml-3 bg-transparent text-sm border-gray-700 border-b" v-model="labelInput" type="text">
-        <button :ref="'penIcon-' + index" class="relative flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, true, label.name)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
+        <button :ref="'penIcon-' + index" class="relative flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, true, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-pencil" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -70,7 +70,7 @@
             <span class="text-xs text-white">Rename label</span>
           </div>
         </button>
-        <button :ref="'checkIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, false, '')" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
+        <button :ref="'checkIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, false, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
           <svg v-show="isEditStatus" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <path d="M5 12l5 5l10 -10" />
@@ -101,7 +101,8 @@ export default {
       isEditStatus: true,
       label: '',
       labelInput: '',
-      lastIndex: -1
+      lastIndex: -1,
+      lastLabel: ''
     }
   },
   computed: {
@@ -110,12 +111,12 @@ export default {
     })
   },
   methods: {
-    editStatus (index, editStatus, label) {
+    async editStatus (index, editStatus, label) {
       if (this.lastIndex !== index && this.lastIndex !== -1) {
-        this.editStatus(this.lastIndex, false, '')
+        await this.editStatus(this.lastIndex, false, this.lastLabel)
       }
-      this.labelInput = label
       if (editStatus) {
+        this.labelInput = label.name
         this.$refs['penIcon-' + index][0].classList.remove('flex')
         this.$refs['penIcon-' + index][0].classList.add('hidden')
         this.$refs['checkIcon-' + index][0].classList.remove('hidden')
@@ -125,7 +126,12 @@ export default {
         this.$refs['inputName-' + index][0].classList.remove('hidden')
         this.$refs['inputName-' + index][0].classList.add('flex')
         this.lastIndex = index
+        this.lastLabel = label
       } else {
+        if (this.labelInput !== label.name) {
+          label.name = this.labelInput
+          await this.$store.dispatch('updateTag', label)
+        }
         this.$refs['penIcon-' + index][0].classList.remove('hidden')
         this.$refs['penIcon-' + index][0].classList.add('flex')
         this.$refs['checkIcon-' + index][0].classList.remove('flex')
@@ -135,6 +141,7 @@ export default {
         this.$refs['labelName-' + index][0].classList.remove('hidden')
         this.$refs['labelName-' + index][0].classList.add('flex')
         this.lastIndex = -1
+        this.lastLabel = ''
       }
     },
     deleteStatus (index, deleteStatus) {
