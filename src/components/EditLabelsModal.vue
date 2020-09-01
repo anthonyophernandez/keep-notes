@@ -37,48 +37,51 @@
         </button>
         <div v-show="!isCreateStatus" class="w-8 h-8"></div>
       </div>
-      <div :ref="'label-' + index" class="flex flex-row items-center justify-between w-full px-4 my-1" v-for="(label, index) in labels" :key="index" @mouseover="deleteStatus(index, true)" @mouseleave="deleteStatus(index, false)">
-        <button :ref="'tagIcon-' + index" class="flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-tag" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-            <circle cx="9" cy="9" r="2" />
-          </svg>
-        </button>
-        <button :ref="'binIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="deleteTag(label)" @mouseover="showOthersTooltip('delete-label-' + index)" @mouseleave="hideOthersTooltip('delete-label-' + index)">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-trash" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <line x1="4" y1="7" x2="20" y2="7" />
-            <line x1="10" y1="11" x2="10" y2="17" />
-            <line x1="14" y1="11" x2="14" y2="17" />
-            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-          </svg>
-          <div :ref="'delete-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 ml-6 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Delete label</span>
-          </div>
-        </button>
-        <span :ref="'labelName-' + index" class="cursor-text w-48 ml-3" @click="editStatus(index, true, label)">{{ label.name }}</span>
-        <input :ref="'inputName-' + index" class="hidden w-48 ml-3 bg-transparent text-sm border-gray-700 border-b" v-model="labelInput" type="text">
-        <button :ref="'penIcon-' + index" class="relative flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, true, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-pencil" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
-            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
-          </svg>
-          <div :ref="'rename-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 mr-6 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Rename label</span>
-          </div>
-        </button>
-        <button :ref="'checkIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, false, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
-          <svg v-show="isEditStatus" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z"/>
-            <path d="M5 12l5 5l10 -10" />
-          </svg>
-          <div :ref="'rename-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 mr-6 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Rename label</span>
-          </div>
-        </button>
+      <div class="w-full h-32 overflow-y-auto">
+        <div :ref="'label-' + index" class="flex flex-row items-center justify-between w-full px-4 my-1" v-for="(label, index) in labels" :key="index" @mouseover="deleteStatus(index, true)" @mouseleave="deleteStatus(index, false)">
+          <button :ref="'tagIcon-' + index" class="flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-tag" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+              <circle cx="9" cy="9" r="2" />
+            </svg>
+          </button>
+          <button :ref="'binIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="deleteTag(label)" @mouseover="showOthersTooltip('delete-label-' + index)" @mouseleave="hideOthersTooltip('delete-label-' + index)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-trash" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="10" y1="11" x2="10" y2="17" />
+              <line x1="14" y1="11" x2="14" y2="17" />
+              <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+              <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+            </svg>
+            <div :ref="'delete-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 ml-6 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">Delete label</span>
+            </div>
+          </button>
+          <span :ref="'labelName-' + index" class="cursor-text w-48 ml-3" @click="editStatus(index, true, label)">{{ label.name }}</span>
+          <input :ref="'inputName-' + index" class="hidden w-48 ml-3 bg-transparent text-sm border-gray-700 border-b" v-model="labelInput" type="text">
+          <button :ref="'penIcon-' + index" class="relative flex items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, true, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-pencil" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+              <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+            </svg>
+            <div :ref="'rename-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 mr-6 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">Rename label</span>
+            </div>
+          </button>
+          <button :ref="'checkIcon-' + index" class="relative hidden items-center justify-center w-8 h-8 rounded-full focus:outline-none hover:bg-white hover:bg-opacity-25" @click="editStatus(index, false, label)" @mouseover="showOthersTooltip('rename-label-' + index)" @mouseleave="hideOthersTooltip('rename-label-' + index)">
+            <svg v-show="isEditStatus" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M5 12l5 5l10 -10" />
+            </svg>
+            <div :ref="'rename-label-' + index" class="hidden absolute items-center justify-center w-20 -mb-12 mr-6 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">Rename label</span>
+            </div>
+          </button>
+        </div>
+        <div class="w-full h-4"></div>
       </div>
       <div class="flex justify-end h-auto w-full border-t border-gray-700">
         <button class="mt-1 mr-1 px-6 py-1 rounded focus:outline-none hover:bg-gray-700 hover:bg-opacity-25" @click="done">
@@ -102,7 +105,7 @@ export default {
       label: '',
       labelInput: '',
       lastIndex: -1,
-      lastLabel: ''
+      lastLabel: {}
     }
   },
   computed: {
@@ -157,8 +160,15 @@ export default {
         this.$refs['binIcon-' + index][0].classList.add('hidden')
       }
     },
-    closeModal () {
+    async closeModal () {
       this.label = ''
+      if (this.labelInput !== this.lastLabel.name) {
+        this.lastLabel.name = this.labelInput
+        await this.$store.dispatch('updateTag', this.lastLabel)
+      }
+      this.labelInput = ''
+      this.lastIndex = -1
+      this.lastLabel = {}
       this.$emit('closeModal')
     },
     cancel () {
