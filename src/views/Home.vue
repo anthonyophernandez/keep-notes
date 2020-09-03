@@ -186,7 +186,7 @@
           <span v-show="isMenuDisplayed">Reminders</span>
         </button>
         <div v-for="(tag, index) in tags" :key="index">
-          <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('3-' + index)]" @click="isSectionSelected = '3-' + index">
+          <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('3-' + index)]" @click="openTagTab(tag, index)">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-tag" :class="(isMenuDisplayed) ? 'mx-6' : ''" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z"/>
               <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
@@ -437,6 +437,10 @@ export default {
         this.$refs['note-' + elem][0].addTagToNote(tag.id)
       })
       this.label = ''
+    },
+    openTagTab (tag, index) {
+      this.isSectionSelected = '3-' + index
+      this.$router.push({ path: `/label/${tag.id}/${tag.name}` })
     }
   }
 }
