@@ -105,7 +105,9 @@ export default {
       label: '',
       labelInput: '',
       lastIndex: -1,
-      lastLabel: {}
+      lastLabel: {
+        name: ''
+      }
     }
   },
   computed: {
@@ -168,7 +170,9 @@ export default {
       }
       this.labelInput = ''
       this.lastIndex = -1
-      this.lastLabel = {}
+      this.lastLabel = {
+        name: ''
+      }
       this.$emit('closeModal')
     },
     cancel () {

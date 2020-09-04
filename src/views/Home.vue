@@ -225,7 +225,9 @@
         </button>
       </div>
     </aside>
-    <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
+    <MainSection ref="main" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isDisplayedGrid="isDisplayedGrid"/>
+    <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
+<!--     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
       <TakeNote class="mx-auto mt-2 mb-8" :tags="tags"/>
       <div v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">PINNED</div>
       <div class="grid gap-5 mt-4 mb-4" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
@@ -273,25 +275,22 @@
         <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
       </div>
       <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
-    </main>
+    </main> -->
   </div>
+
 </template>
 
 <script>
-import NoteCard from '../components/NoteCard.vue'
-import TakeNote from '../components/TakeNote.vue'
+import MainSection from '../components/MainSection.vue'
 import ColorSelector from '../components/ColorSelector.vue'
-
 import EditLabelsModal from '../components/EditLabelsModal.vue'
-
 import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
-    NoteCard,
-    TakeNote,
     ColorSelector,
+    MainSection,
     EditLabelsModal
   },
   data () {
@@ -301,9 +300,6 @@ export default {
       isMenuButtonPressed: false,
       isEditLabelsModalOpened: false,
       isSectionSelected: '1',
-      isNoteOpened: false,
-      selectedNoteIndex: -1,
-      selectedNote: {},
       selectedNotes: [],
       isShownReminderSection: false,
       isShownColorSelector: false,
@@ -316,13 +312,7 @@ export default {
     ...mapState({
       notes: state => state.notes,
       tags: state => state.tags
-    }),
-    arePinned () {
-      return this.notes.filter(n => n.isPinned)
-    },
-    areNotPinned () {
-      return this.notes.filter(n => !n.isPinned)
-    }
+    })
   },
   methods: {
     selectedSectionClass (section) {
@@ -336,46 +326,25 @@ export default {
       this.isEditLabelsModalOpened = true
       this.isMenuDisplayed = !this.isMenuDisplayed
     },
-    openNote (index) {
-      this.selectedNote = this.notes[index]
-      this.selectedNoteIndex = index
-      this.isNoteOpened = true
-    },
-    closeNote () {
-      this.selectedNoteIndex = -1
-      this.isNoteOpened = false
-    },
-    openedNoteClass (index) {
-      return (this.selectedNoteIndex === index) ? 'border-yellow-500' : ''
-    },
-    addNoteToSelected (elem) {
-      const index = this.selectedNotes.indexOf(elem)
-      if (index === -1) {
-        this.selectedNotes.push(elem)
-      }
-    },
-    removeNoteFromSelected (elem) {
-      const index = this.selectedNotes.indexOf(elem)
-      if (index !== -1) {
-        this.selectedNotes = [...this.selectedNotes.slice(0, index), ...this.selectedNotes.slice(index + 1)]
-      }
+    setSelection (selectedNotes) {
+      this.selectedNotes = selectedNotes
     },
     clearSelection () {
       this.selectedNotes.forEach(ele => {
-        this.$refs['note-' + ele][0].selectNote()
+        this.$refs.main.$refs['note-' + ele][0].selectNote()
       })
       this.selectedNotes = []
     },
     archiveNotes () {
       this.selectedNotes.forEach(elem => {
-        this.$refs['note-' + elem][0].archiveNote()
+        this.$refs.main.$refs['note-' + elem][0].archiveNote()
       })
       this.clearSelection()
     },
     pinNotes () {
       this.selectedNotes.forEach(elem => {
-        if (!this.$refs['note-' + elem][0].isPinned) {
-          this.$refs['note-' + elem][0].pinNote()
+        if (!this.$refs.main.$refs['note-' + elem][0].isPinned) {
+          this.$refs.main.$refs['note-' + elem][0].pinNote()
         }
       })
       this.clearSelection()
@@ -390,19 +359,19 @@ export default {
     },
     changeColor (obj) {
       this.selectedNotes.forEach(elem => {
-        this.$refs['note-' + elem][0].changeColor(obj)
+        this.$refs.main.$refs['note-' + elem][0].changeColor(obj)
       })
       this.clearSelection()
     },
     deleteNotes () {
       this.selectedNotes.forEach(elem => {
-        this.$refs['note-' + elem][0].deleteNote()
+        this.$refs.main.$refs['note-' + elem][0].deleteNote()
       })
       this.clearSelection()
     },
     copyNotes () {
       this.selectedNotes.forEach(elem => {
-        this.$refs['note-' + elem][0].copyNote()
+        this.$refs.main.$refs['note-' + elem][0].copyNote()
       })
       this.clearSelection()
     },
@@ -415,15 +384,15 @@ export default {
       if (this.$refs['check-' + index][0].checked) {
         // Add label
         this.selectedNotes.forEach(elem => {
-          if (this.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) === -1) {
-            this.$refs['note-' + elem][0].addTagToNote(label.id)
+          if (this.$refs.main.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) === -1) {
+            this.$refs.main.$refs['note-' + elem][0].addTagToNote(label.id)
           }
         })
       } else {
         // Remove label
         this.selectedNotes.forEach(elem => {
-          if (this.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) !== -1) {
-            this.$refs['note-' + elem][0].deleteTagFromNote(label.id)
+          if (this.$refs.main.$refs['note-' + elem][0].note.tagIds.indexOf(label.id) !== -1) {
+            this.$refs.main.$refs['note-' + elem][0].deleteTagFromNote(label.id)
           }
         })
       }
@@ -434,7 +403,7 @@ export default {
       }
       const tag = await this.$store.dispatch('createLabel', newLabel)
       this.selectedNotes.forEach(elem => {
-        this.$refs['note-' + elem][0].addTagToNote(tag.id)
+        this.$refs.main.$refs['note-' + elem][0].addTagToNote(tag.id)
       })
       this.label = ''
     },
