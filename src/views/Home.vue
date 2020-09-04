@@ -227,57 +227,7 @@
     </aside>
     <MainSection ref="main" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isDisplayedGrid="isDisplayedGrid"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
-<!--     <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
-      <TakeNote class="mx-auto mt-2 mb-8" :tags="tags"/>
-      <div v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">PINNED</div>
-      <div class="grid gap-5 mt-4 mb-4" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
-        <NoteCard
-          :ref="'note-'+ index"
-          class="w-auto h-auto mx-auto"
-          :class="openedNoteClass(index)"
-          v-for="(note, index) in arePinned" :key="index"
-          :index="index"
-          :note="note"
-          @open="openNote(index)"
-          @select="addNoteToSelected"
-          @unselect="removeNoteFromSelected"
-          @close="closeNote"
-          :tags="tags"
-        />
-      </div>
-      <div v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">OTHERS</div>
-      <div class="grid gap-5 mt-4 mb-20" :class="(isDisplayedGrid) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
-        <NoteCard
-          :ref="'note-'+ index"
-          class="w-auto h-auto mx-auto"
-          :class="openedNoteClass(index)"
-          v-for="(note, index) in areNotPinned" :key="index"
-          :index="index"
-          :note="note"
-          @open="openNote(index)"
-          @select="addNoteToSelected"
-          @unselect="removeNoteFromSelected"
-          @close="closeNote"
-          :tags="tags"
-        />
-      </div>
-      <div v-show="isNoteOpened" class="fixed z-40 inset-0">
-        <div class="mx-auto my-64 w-full max-w-xl rounded-lg bg-black">
-          <NoteCard
-            class="z-50"
-            :note="selectedNote"
-            :index="selectedNoteIndex"
-            :isNoteOpened="isNoteOpened"
-            @close="closeNote"
-            :tags="tags"
-          />
-        </div>
-        <div @click="closeNote" class="fixed z-40 inset-0 opacity-50 bg-black"></div>
-      </div>
-      <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
-    </main> -->
   </div>
-
 </template>
 
 <script>
