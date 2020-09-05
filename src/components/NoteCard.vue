@@ -62,17 +62,7 @@
     <div class="flex items-center justify-between w-full h-12 mb-1 px-2">
       <div v-show="isVisible || isNoteOpened" class="flex items-center">
         <div class="relative">
-          <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isShownReminderSection = true" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z"/>
-              <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-            </svg>
-            <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
-              <span class="text-xs text-white">Remind me</span>
-            </div>
-          </button>
-          <div class="absolute z-40 w-48 py-1 bg-black text-white border rounded" v-if="isShownReminderSection" @mouseleave="isShownReminderSection = false">
+          <div class="absolute z-40 w-48 -mt-32 -mr-24 py-1 bg-black text-white border rounded" v-if="isShownReminderSection" @mouseleave="isShownReminderSection = false">
             <div class="w-full px-2 py-2 ">
               <span>Reminder:</span>
             </div>
@@ -89,6 +79,16 @@
               <span class="text-gray-500">Mon, 8:00 PM</span>
             </div>
           </div>
+          <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isShownReminderSection = true" @mouseover="showTooltip('remind-me')" @mouseleave="hideTooltip('remind-me')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"/>
+              <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <div ref="remind-me" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-4 lg:mr-0 rounded bg-gray-700 bg-opacity-75">
+              <span class="text-xs text-white">Remind me</span>
+            </div>
+          </button>
         </div>
         <div class="relative">
           <ColorSelector v-if="isShownColorSelector" class="absolute -mt-20 -ml-6" :selectedIndexColor="note.selectedIndexColor" @changeColor="changeColor" @mouseleave.native="isShownColorSelector = false"/>
@@ -123,6 +123,26 @@
           </div>
         </button>
         <div class="relative">
+          <div class="absolute z-40 w-40 sm:w-48 -mt-32 -mr-24 py-1 bg-black text-white border rounded" v-if="isShownLabelSection" @mouseleave="isShownLabelSection = false">
+            <div class="w-full pl-2 pr-1 mb-3">
+              <label for="label" class="text-sm">Label note</label>
+              <input class="w-full bg-transparent text-xs" v-model="label" maxlength="50" name="label" id="label" type="text" placeholder="Enter label name">
+            </div>
+            <div v-for="(tag, index) in tags" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
+              <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" :checked="note.tagIds.indexOf(tag.id) !== -1" type="checkbox" name="select-tag" id="select-tag">
+              <span class="w-full text-sm text-white" @click="selectTag(index, tag)">{{ tag.name }}</span>
+            </div>
+            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
+              <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z"/>
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </div>
+              <div class="ml-5 break-all text-xs font-semibold">Create "{{ label }} "</div>
+            </div>
+          </div>
           <button class="relative flex items-center justify-center w-8 h-8 ml-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="isShownMoreSection =! isShownMoreSection" @mouseover="showTooltip('more')" @mouseleave="hideTooltip('more')">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-dots-vertical" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z"/>
@@ -145,26 +165,6 @@
               <span class="text-sm">Make a copy</span>
             </button>
           </div>
-          <div class="absolute z-40 w-40 sm:w-48 -ml-6 py-1 bg-black text-white border rounded" v-if="isShownLabelSection" @mouseleave="isShownLabelSection = false">
-            <div class="w-full pl-2 pr-1 mb-3">
-              <label for="label" class="text-sm">Label note</label>
-              <input class="w-full bg-transparent text-xs" v-model="label" maxlength="50" name="label" id="label" type="text" placeholder="Enter label name">
-            </div>
-            <div v-for="(tag, index) in tags" :key="index" class="flex items-center cursor-pointer w-full py-1 hover:bg-white hover:bg-opacity-25">
-              <input :ref="'check-' + index" class="h-3 w-3 ml-2 mr-2 cursor-pointer appearance-none border checked:bg-white" :checked="note.tagIds.indexOf(tag.id) !== -1" type="checkbox" name="select-tag" id="select-tag">
-              <span class="w-full text-sm text-white" @click="selectTag(index, tag)">{{ tag.name }}</span>
-            </div>
-            <div v-if="label.length > 0" class="relative cursor-pointer w-full pt-1 px-1 text-white border-t" @click="createLabel">
-              <div class="absolute top-0 left-0 w-5 h-5 ml-1 mt-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-current icon icon-tabler icon-tabler-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z"/>
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-              </div>
-              <div class="ml-5 break-all text-xs font-semibold">Create "{{ label }} "</div>
-            </div>
-          </div>
         </div>
       </div>
       <button v-show="isNoteOpened" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="close">Close</button>
@@ -181,7 +181,7 @@ export default {
   components: {
     ColorSelector
   },
-  props: ['note', 'isNoteOpened', 'index', 'tags'],
+  props: ['note', 'index', 'tags'],
   data () {
     return {
       isVisible: false,
