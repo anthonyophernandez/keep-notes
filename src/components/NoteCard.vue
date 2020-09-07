@@ -181,7 +181,7 @@ export default {
   components: {
     ColorSelector
   },
-  props: ['note', 'index', 'tags'],
+  props: ['note', 'index', 'tags', 'isNoteOpened'],
   data () {
     return {
       isVisible: false,
