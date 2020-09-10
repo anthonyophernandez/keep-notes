@@ -19,14 +19,14 @@
         <input class="w-full pl-10 pr-4 py-2 bg-gray-600 bg-opacity-25 rounded-lg focus:outline-none focus:bg-gray-200 placeholder-gray-600" type="text" placeholder="Search">
       </div>
       <button class="hidden md:flex items-center justify-center w-10 h-10 mr-2 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none text-gray-600 hover:text-white" @click="displayGrid">
-        <svg v-show="isDisplayedGrid" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-grid" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-show="isGridDisplayed" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-grid" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <rect x="4" y="4" width="6" height="6" rx="1" />
           <rect x="14" y="4" width="6" height="6" rx="1" />
           <rect x="4" y="14" width="6" height="6" rx="1" />
           <rect x="14" y="14" width="6" height="6" rx="1" />
         </svg>
-        <svg v-show="!isDisplayedGrid" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-layout-rows" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <svg v-show="!isGridDisplayed" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-layout-rows" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <rect x="4" y="4" width="16" height="16" rx="2" />
           <line x1="4" y1="12" x2="20" y2="12" />
@@ -39,7 +39,7 @@
 <script>
 export default {
   name: 'TopBar',
-  props: ['isDisplayedGrid'],
+  props: ['isGridDisplayed'],
   methods: {
     toggleMenu () {
       this.$emit('toggleMenu')

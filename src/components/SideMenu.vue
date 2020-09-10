@@ -1,7 +1,7 @@
 <template>
-  <aside class="fixed inset-y-0 left-0 mt-16 bg-black" :class="(isMenuDisplayed) ? 'w-64 z-50' : 'w-20'" @mouseover="isMenuDisplayed = true" @mouseleave="isMenuDisplayed = isMenuButtonPressed">
+  <aside class="fixed inset-y-0 left-0 mt-16 bg-black" :class="(isMenuDisplayed) ? 'w-64 z-50' : 'w-20'" @mouseover="$store.dispatch('updateMenuDisplayed', true)" @mouseleave="$store.dispatch('updateMenuDisplayed', isMenuButtonPressed)">
     <div class="mt-2">
-      <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('1')]" @click="isSectionSelected = '1'">
+      <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('1')]" @click="openNotesTab">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-bulb" :class="(isMenuDisplayed) ? 'mx-6' : ''" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M3 12h1M12 3v1M20 12h1M5.6 5.6l.7 .7M18.4 5.6l-.7 .7" />
@@ -80,6 +80,10 @@ export default {
     openTagTab (tag, index) {
       this.isSectionSelected = '3-' + index
       this.$router.push({ path: `/label/${tag.id}/${tag.name}` })
+    },
+    openNotesTab () {
+      this.isSectionSelected = '1'
+      this.$router.push({ path: '/' })
     }
   }
 }

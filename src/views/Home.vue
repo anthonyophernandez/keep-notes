@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full h-full">
-    <TopBar @toggleMenu="toggleMenu" @displayGrid="isDisplayedGrid = !isDisplayedGrid" :isDisplayedGrid="isDisplayedGrid"/>
+    <TopBar @toggleMenu="toggleMenu" @displayGrid="$store.dispatch('updateGridDisplayed', !isGridDisplayed)" :isGridDisplayed="isGridDisplayed"/>
     <SelectionBar
       :tags="tags"
       :selectedNotes="selectedNotes"
@@ -13,7 +13,7 @@
       @createLabel="createLabel"
       @selectTag="selectTag"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
-    <MainSection ref="main" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isDisplayedGrid="isDisplayedGrid"/>
+    <MainSection ref="main" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
   </div>
 </template>
@@ -38,9 +38,6 @@ export default {
   },
   data () {
     return {
-      isDisplayedGrid: false,
-      isMenuDisplayed: false,
-      isMenuButtonPressed: false,
       isEditLabelsModalOpened: false,
       selectedNotes: []
     }
@@ -48,13 +45,16 @@ export default {
   computed: {
     ...mapState({
       notes: state => state.notes,
-      tags: state => state.tags
+      tags: state => state.tags,
+      isMenuDisplayed: state => state.isMenuDisplayed,
+      isGridDisplayed: state => state.isGridDisplayed,
+      isMenuButtonPressed: state => state.isMenuButtonPressed
     })
   },
   methods: {
     toggleMenu () {
-      this.isMenuButtonPressed = !this.isMenuButtonPressed
-      this.isMenuDisplayed = !this.isMenuDisplayed
+      this.$store.dispatch('updateMenuButtonPressed', !this.isMenuButtonPressed)
+      this.$store.dispatch('updateMenuDisplayed', !this.isMenuDisplayed)
     },
     openEditLabelsModal () {
       this.isEditLabelsModalOpened = true

@@ -8,7 +8,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     notes: [],
-    tags: []
+    tags: [],
+    isMenuDisplayed: false,
+    isGridDisplayed: false,
+    isMenuButtonPressed: false
   },
   mutations: {
     SET_NOTES (state, notes) {
@@ -50,6 +53,15 @@ export default new Vuex.Store({
     DISCONNECT_TAG_FROM_NOTE (state, { note, tag }) {
       note.tagIds = note.tagIds.filter(t => t !== tag.id)
       tag.noteIds = tag.noteIds.filter(n => n !== note.id)
+    },
+    SET_MENU_DISPLAYED (state, isMenuDisplayed) {
+      state.isMenuDisplayed = isMenuDisplayed
+    },
+    SET_GRID_DISPLAYED (state, isGridDisplayed) {
+      state.isGridDisplayed = isGridDisplayed
+    },
+    SET_MENU_BUTTON_PRESSED (state, isMenuButtonPressed) {
+      state.isMenuButtonPressed = isMenuButtonPressed
     }
   },
   actions: {
@@ -119,6 +131,15 @@ export default new Vuex.Store({
         tagId: tag.id
       })
       commit('DISCONNECT_TAG_FROM_NOTE', { note, tag })
+    },
+    updateMenuDisplayed ({ commit }, isMenuDisplayed) {
+      commit('SET_MENU_DISPLAYED', isMenuDisplayed)
+    },
+    updateGridDisplayed ({ commit }, isGridDisplayed) {
+      commit('SET_GRID_DISPLAYED', isGridDisplayed)
+    },
+    updateMenuButtonPressed ({ commit }, isMenuButtonPressed) {
+      commit('SET_GRID_DISPLAYED', isMenuButtonPressed)
     }
   },
   getters: {
