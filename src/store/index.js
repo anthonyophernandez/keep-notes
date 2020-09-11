@@ -11,7 +11,8 @@ export default new Vuex.Store({
     tags: [],
     isMenuDisplayed: false,
     isGridDisplayed: false,
-    isMenuButtonPressed: false
+    isMenuButtonPressed: false,
+    sectionSelected: '1'
   },
   mutations: {
     SET_NOTES (state, notes) {
@@ -62,6 +63,9 @@ export default new Vuex.Store({
     },
     SET_MENU_BUTTON_PRESSED (state, isMenuButtonPressed) {
       state.isMenuButtonPressed = isMenuButtonPressed
+    },
+    SET_SELECTION (state, sectionSelected) {
+      state.sectionSelected = sectionSelected
     }
   },
   actions: {
@@ -140,6 +144,9 @@ export default new Vuex.Store({
     },
     updateMenuButtonPressed ({ commit }, isMenuButtonPressed) {
       commit('SET_GRID_DISPLAYED', isMenuButtonPressed)
+    },
+    updateSection ({ commit }, sectionSelected) {
+      commit('SET_SELECTION', sectionSelected)
     }
   },
   getters: {
