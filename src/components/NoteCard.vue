@@ -226,30 +226,35 @@ export default {
     archiveNote () {
       this.note.isArchived = !this.note.isArchived
     },
-    pinNote () {
+    async pinNote () {
       this.note.isPinned = !this.note.isPinned
-      this.$store.dispatch('updateNote', this.note)
+      await this.$store.dispatch('updateNote', this.note)
     },
-    changeColor (obj) {
+    async changeColor (obj) {
       this.note.currentColor = obj.selectedColor
       this.note.selectedIndexColor = obj.selectedIndexColor
-      this.$store.dispatch('updateNote', this.note)
+      await this.$store.dispatch('updateNote', this.note)
     },
-    deleteNote () {
-      this.$store.dispatch('deleteNote', this.note)
+    async deleteNote () {
+      await this.$store.dispatch('deleteNote', this.note)
       this.$emit('close')
       this.isShownMoreSection = false
     },
-    copyNote () {
+    async copyNote () {
+      const tagIds = this.note.tagIds
       const newNote = {
         title: this.note.title,
         content: this.note.content,
-        tags: this.note.tags,
+        tagIds: [],
         isPinned: this.note.isPinned,
         currentColor: this.note.currentColor,
         selectedIndexColor: this.note.selectedIndexColor
       }
-      this.$store.dispatch('createNote', newNote)
+      const savedNote = await this.$store.dispatch('createNote', newNote)
+      tagIds.forEach(async tId => {
+        const tag = this.getTag(tId)
+        await this.$store.dispatch('connectTagToNote', { note: savedNote, tag: tag })
+      })
       this.$emit('close')
       this.isShownMoreSection = false
     },
@@ -257,13 +262,13 @@ export default {
       this.isShownMoreSection = false
       this.isShownLabelSection = true
     },
-    addTagToNote (tagId) {
+    async addTagToNote (tagId) {
       const tag = this.getTag(tagId)
-      this.$store.dispatch('connectTagToNote', { note: this.note, tag: tag })
+      await this.$store.dispatch('connectTagToNote', { note: this.note, tag: tag })
     },
-    deleteTagFromNote (tagId) {
+    async deleteTagFromNote (tagId) {
       const tag = this.getTag(tagId)
-      this.$store.dispatch('disconnectTagFromNote', { note: this.note, tag: tag })
+      await this.$store.dispatch('disconnectTagFromNote', { note: this.note, tag: tag })
     },
     selectTag (index, label) {
       this.$refs['check-' + index][0].checked = !this.$refs['check-' + index][0].checked

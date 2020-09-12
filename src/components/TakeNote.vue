@@ -215,7 +215,7 @@ export default {
       this.selectedIndexColor = 1
       this.noteTagIds = []
     },
-    close () {
+    async close () {
       const note = {
         title: this.title,
         content: this.content,
@@ -226,7 +226,7 @@ export default {
         selectedIndexColor: this.selectedIndexColor
       }
       if (this.title.length > 0 || this.content.length > 0) {
-        this.$store.dispatch('createNote', note)
+        await this.$store.dispatch('createNote', note)
       }
       this.clear()
     },

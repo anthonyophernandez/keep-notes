@@ -84,6 +84,7 @@ export default new Vuex.Store({
       savedNote.attributes.id = savedNote.id
       savedNote.attributes.tagIds = savedNote.relationships.tags.data.map(t => t.id)
       commit('ADD_NOTE', savedNote.attributes)
+      return savedNote.attributes
     },
     async updateNote ({ commit }, note) {
       await Api().put(`/api/notes/${note.id}`, note)
