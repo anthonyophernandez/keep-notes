@@ -81,14 +81,14 @@ export default {
     },
     openTagTab (tag, index) {
       this.selectSection('3-' + index)
-      this.$router.push({ path: `/label/${tag.id}/${tag.name}` })
+      this.$router.push({ path: `/label/${tag.id}/${tag.name}` }).catch(() => {})
     },
     openNotesTab () {
       this.selectSection('1')
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/' }).catch(() => {})
     },
     selectSection (section) {
-      this.$store.dispatch('updateSection', section)
+      this.$store.dispatch('updateSection', section).catch(() => {})
     }
   }
 }

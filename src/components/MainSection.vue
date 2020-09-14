@@ -4,7 +4,7 @@
     <div v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">PINNED</div>
     <div class="grid gap-5 mt-4 mb-4" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
       <NoteCard
-        :ref="'note-'+ index"
+        :ref="'note-pinned-'+ index"
         class="w-auto h-auto mx-auto"
         :class="openedNoteClass(index)"
         v-for="(note, index) in arePinned" :key="index"
@@ -20,7 +20,7 @@
     <div v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">OTHERS</div>
     <div class="grid gap-5 mt-4 mb-20" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
       <NoteCard
-        :ref="'note-'+ index"
+        :ref="'note-unpinned-'+ index"
         class="w-auto h-auto mx-auto"
         :class="openedNoteClass(index)"
         v-for="(note, index) in areNotPinned" :key="index"

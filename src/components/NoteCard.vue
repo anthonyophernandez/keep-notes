@@ -217,10 +217,11 @@ export default {
     },
     selectNote () {
       this.isSelected = !this.isSelected
+      const isPinned = (this.note.isPinned) ? 'pinned' : 'unpinned'
       if (this.isSelected) {
-        this.$emit('select', this.index)
+        this.$emit('select', isPinned + '-' + this.index)
       } else {
-        this.$emit('unselect', this.index)
+        this.$emit('unselect', isPinned + '-' + this.index)
       }
     },
     archiveNote () {
