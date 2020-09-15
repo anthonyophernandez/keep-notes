@@ -2,6 +2,7 @@ import { Server, JSONAPISerializer, Model, hasMany } from 'miragejs'
 import { camelCase } from 'lodash'
 import notesJSON from './notes.json'
 import tagsJSON from './tags.json'
+import binJSON from './bin.json'
 
 export default function () {
   const server = new Server({
@@ -30,7 +31,8 @@ export default function () {
     },
     fixtures: {
       notes: notesJSON,
-      tags: tagsJSON
+      tags: tagsJSON,
+      bin: binJSON
     }
   })
 
@@ -63,5 +65,14 @@ export default function () {
   })
   server.post('/note_tags/delete', function () {
     return new Response(200)
+  })
+
+  server.get('/bin', (schema, _) => {
+    return schema.db.bin
+  })
+  server.post('/bin', (schema, request) => {
+    const json = JSON.parse(request.requestBody)
+    const response = schema.db.bin.insert(json)
+    return response
   })
 }

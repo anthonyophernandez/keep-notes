@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     notes: [],
     tags: [],
+    bin: [],
     isMenuDisplayed: false,
     isGridDisplayed: false,
     isMenuButtonPressed: false,
@@ -66,6 +67,12 @@ export default new Vuex.Store({
     },
     SET_SELECTION (state, sectionSelected) {
       state.sectionSelected = sectionSelected
+    },
+    ADD_NOTE_ID_TO_BIN (state, noteId) {
+      state.bin = [noteId].concat(state.bin)
+    },
+    SET_BIN (state, bin) {
+      state.bin = bin
     }
   },
   actions: {
@@ -93,7 +100,9 @@ export default new Vuex.Store({
     async deleteNote ({ commit }, note) {
       const response = await Api().delete(`/api/notes/${note.id}`, note)
       if (response.status === 200 || response.status === 204) {
+        const binResponse = await Api().post('/api/bin', { id: note.id })
         commit('DELETE_NOTE', note)
+        commit('ADD_NOTE_ID_TO_BIN', binResponse.data)
       }
     },
     async loadAllTags ({ commit }) {
@@ -136,6 +145,10 @@ export default new Vuex.Store({
         tagId: tag.id
       })
       commit('DISCONNECT_TAG_FROM_NOTE', { note, tag })
+    },
+    async loadBin ({ commit }) {
+      const response = await Api().get('/api/bin')
+      commit('SET_BIN', response.data)
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {
       commit('SET_MENU_DISPLAYED', isMenuDisplayed)

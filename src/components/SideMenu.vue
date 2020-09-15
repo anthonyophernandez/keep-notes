@@ -45,7 +45,7 @@
         </svg>
         <span v-show="isMenuDisplayed">Archive</span>
       </button>
-      <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('6')]" @click="selectSection('6')">
+      <button class="flex items-center h-12 text-white focus:outline-none" :class="[(isMenuDisplayed) ? 'w-full rounded-r-full' : 'w-12 ml-4 justify-center rounded-full', selectedSectionClass('6')]" @click="openTrashTab">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current icon icon-tabler icon-tabler-trash" :class="(isMenuDisplayed) ? 'mx-6' : ''" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <line x1="4" y1="7" x2="20" y2="7" />
@@ -86,6 +86,10 @@ export default {
     openNotesTab () {
       this.selectSection('1')
       this.$router.push({ path: '/' }).catch(() => {})
+    },
+    openTrashTab () {
+      this.selectSection('6')
+      this.$router.push({ path: '/trash' }).catch(() => {})
     },
     selectSection (section) {
       this.$store.dispatch('updateSection', section).catch(() => {})
