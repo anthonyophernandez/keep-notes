@@ -137,6 +137,14 @@ export default {
       })
       this.clearSelection()
     }
+  },
+  mounted () {
+    const index = this.tags.indexOf(this.tag)
+    this.$store.dispatch('updateSection', '3-' + index).catch(() => {})
+  },
+  updated () {
+    const index = this.tags.indexOf(this.tag)
+    this.$store.dispatch('updateSection', '3-' + index).catch(() => {})
   }
 }
 </script>

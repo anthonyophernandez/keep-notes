@@ -127,6 +127,9 @@ export default {
       })
       this.clearSelection()
     }
+  },
+  mounted () {
+    this.$store.dispatch('updateSection', '1').catch(() => {})
   }
 }
 </script>

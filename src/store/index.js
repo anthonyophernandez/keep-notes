@@ -68,8 +68,8 @@ export default new Vuex.Store({
     SET_SELECTION (state, sectionSelected) {
       state.sectionSelected = sectionSelected
     },
-    ADD_NOTE_ID_TO_BIN (state, noteId) {
-      state.bin = [noteId].concat(state.bin)
+    ADD_NOTE_ID_TO_BIN (state, note) {
+      state.bin = [note].concat(state.bin)
     },
     SET_BIN (state, bin) {
       state.bin = bin
@@ -98,9 +98,9 @@ export default new Vuex.Store({
       commit('UPDATE_NOTE', note)
     },
     async deleteNote ({ commit }, note) {
+      const binResponse = await Api().post('/api/bin', note)
       const response = await Api().delete(`/api/notes/${note.id}`, note)
       if (response.status === 200 || response.status === 204) {
-        const binResponse = await Api().post('/api/bin', { id: note.id })
         commit('DELETE_NOTE', note)
         commit('ADD_NOTE_ID_TO_BIN', binResponse.data)
       }
