@@ -56,6 +56,9 @@ export default new Vuex.Store({
       note.tagIds = note.tagIds.filter(t => t !== tag.id)
       tag.noteIds = tag.noteIds.filter(n => n !== note.id)
     },
+    DISCONNECT_NOTE_FROM_TAG (state, { note, tag }) {
+      tag.noteIds = tag.noteIds.filter(n => n !== note.id)
+    },
     SET_MENU_DISPLAYED (state, isMenuDisplayed) {
       state.isMenuDisplayed = isMenuDisplayed
     },
@@ -73,6 +76,9 @@ export default new Vuex.Store({
     },
     SET_BIN (state, bin) {
       state.bin = bin
+    },
+    DELETE_FOREVER (state, note) {
+      state.bin = state.bin.filter(n => n.id === note.id)
     }
   },
   actions: {
@@ -146,9 +152,20 @@ export default new Vuex.Store({
       })
       commit('DISCONNECT_TAG_FROM_NOTE', { note, tag })
     },
+    async disconnectNoteFromTag ({ commit }, { note, tag }) {
+      await Api().post('/api/note_tags/delete', {
+        noteId: note.id,
+        tagId: tag.id
+      })
+      commit('DISCONNECT_NOTE_FROM_TAG', { note, tag })
+    },
     async loadBin ({ commit }) {
       const response = await Api().get('/api/bin')
       commit('SET_BIN', response.data)
+    },
+    async deleteNoteForever ({ commit }, note) {
+      const response = await Api().delete(`/api/bin/${note.id}`, note)
+      commit('DELETE_FOREVER', response)
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {
       commit('SET_MENU_DISPLAYED', isMenuDisplayed)

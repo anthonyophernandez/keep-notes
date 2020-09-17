@@ -75,4 +75,8 @@ export default function () {
     const response = schema.db.bin.insert(json)
     return response
   })
+  server.delete('/bin/:id', (schema, request) => {
+    const id = request.params.id
+    schema.db.bin.remove(id)
+  })
 }

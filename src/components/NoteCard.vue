@@ -237,9 +237,16 @@ export default {
       await this.$store.dispatch('updateNote', this.note)
     },
     async deleteNote () {
+      this.note.tagIds.forEach(async tId => {
+        const tag = this.getTag(tId)
+        await this.$store.dispatch('disconnectNoteFromTag', { note: this.note, tag: tag })
+      })
       await this.$store.dispatch('deleteNote', this.note)
       this.$emit('close')
       this.isShownMoreSection = false
+    },
+    async deleteNoteForever () {
+      await this.$store.dispatch('deleteNoteForever', this.note)
     },
     async copyNote () {
       const tagIds = this.note.tagIds

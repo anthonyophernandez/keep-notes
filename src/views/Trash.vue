@@ -1,6 +1,11 @@
 <template>
   <div>
     <TopBar @toggleMenu="toggleMenu" @displayGrid="$store.dispatch('updateGridDisplayed', !isGridDisplayed)" :isGridDisplayed="isGridDisplayed"/>
+    <SelectionBar
+      :tags="bin"
+      :selectedNotes="selectedNotes"
+      @clearSelection="clearSelection"
+      @deleteNotes="deleteNotes"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
     <MainSection ref="main" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
@@ -9,6 +14,7 @@
 
 <script>
 import MainSection from '../components/MainSection.vue'
+import SelectionBar from '../components/SelectionBar.vue'
 import SideMenu from '../components/SideMenu.vue'
 import TopBar from '../components/TopBar.vue'
 import EditLabelsModal from '../components/EditLabelsModal.vue'
@@ -20,6 +26,7 @@ export default {
   components: {
     MainSection,
     SideMenu,
+    SelectionBar,
     TopBar,
     EditLabelsModal
   },
@@ -51,6 +58,18 @@ export default {
     },
     setSelection (selectedNotes) {
       this.selectedNotes = selectedNotes
+    },
+    clearSelection () {
+      this.selectedNotes.forEach(ele => {
+        this.$refs.main.$refs['note-' + ele][0].selectNote()
+      })
+      this.selectedNotes = []
+    },
+    async deleteNotes () {
+      this.selectedNotes.forEach(elem => {
+        this.$refs.main.$refs['note-' + elem][0].deleteNoteForever()
+      })
+      this.clearSelection()
     }
   },
   mounted () {
