@@ -13,7 +13,7 @@
         </button>
         <h3 class="text-xl text-white ml-2">{{ selectedNotes.length }} selected</h3>
       </div>
-      <div class="flex items-center mr-5">
+      <div v-if="!isTrashView" class="flex items-center mr-5">
         <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="pinNotes" @mouseover="showTooltip('pin')" @mouseleave="hideTooltip('pin')">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -129,6 +129,9 @@
           </div>
         </div>
       </div>
+      <div v-else class="flex items-center mr-5 text-white">
+        Trash View
+      </div>
     </div>
 </template>
 
@@ -136,7 +139,7 @@
 import ColorSelector from '../components/ColorSelector.vue'
 export default {
   name: 'SelectionBar',
-  props: ['selectedNotes', 'tags'],
+  props: ['isTrashView', 'selectedNotes', 'tags'],
   components: {
     ColorSelector
   },

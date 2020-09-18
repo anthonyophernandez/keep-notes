@@ -5,9 +5,10 @@
       :tags="bin"
       :selectedNotes="selectedNotes"
       @clearSelection="clearSelection"
-      @deleteNotes="deleteNotes"/>
+      @deleteNotes="deleteNotes"
+      :isTrashView="true"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
-    <MainSection ref="main" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
+    <MainSection ref="main" :isTrashView="true" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
   </div>
 </template>

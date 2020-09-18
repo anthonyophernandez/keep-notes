@@ -11,9 +11,10 @@
       @deleteNotes="deleteNotes"
       @copyNotes="copyNotes"
       @createLabel="createLabel"
-      @selectTag="selectTag"/>
+      @selectTag="selectTag"
+      :isTrashView="false"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
-    <MainSection ref="main" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
+    <MainSection ref="main" :isTrashView="false" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
   </div>
 </template>

@@ -13,7 +13,7 @@
       </div>
     </button>
     <div class="absolute top-0 right-0">
-      <button class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(note.isPinned) ? 'text-white' : 'text-gray-600'" @click="pinNote" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
+      <button v-if="!isTrashView" class="relative flex items-center justify-center w-8 h-8 mt-2 mr-1 rounded-full hover:bg-gray-600 hover:bg-opacity-25 hover:text-white focus:outline-none" :class="(note.isPinned) ? 'text-white' : 'text-gray-600'" @click="pinNote" @mouseover="showTooltip('pin-note')" @mouseleave="hideTooltip('pin-note')">
         <svg v-show="isVisible || isNoteOpened || note.isPinned" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-current icon icon-tabler icon-tabler-anchor" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />
@@ -25,7 +25,7 @@
         </div>
       </button>
     </div>
-    <div v-if="!isNoteOpened" class="w-full h-full pl-4 pr-10" @click="$emit('open')">
+    <div v-if="!isNoteOpened || isTrashView" class="w-full h-full pl-4 pr-10" @click="$emit('open')">
       <h2 class="text-base text-white break-words font-bold" :class="(isNoteOpened) ? 'mt-0' : 'mt-2'">{{ note.title }}</h2>
       <div class="mt-2">
         <p class="text-sm text-white break-all">
@@ -59,7 +59,7 @@
         </button>
       </div>
     </div>
-    <div class="flex items-center justify-between w-full h-12 mb-1 px-2">
+    <div v-if="!isTrashView" class="flex items-center justify-between w-full h-12 mb-1 px-2">
       <div v-show="isVisible || isNoteOpened" class="flex items-center">
         <div class="relative">
           <div class="absolute z-40 w-48 -mt-32 -mr-24 py-1 bg-black text-white border rounded" v-if="isShownReminderSection" @mouseleave="isShownReminderSection = false">
@@ -181,7 +181,7 @@ export default {
   components: {
     ColorSelector
   },
-  props: ['note', 'index', 'tags', 'isNoteOpened'],
+  props: ['isTrashView', 'note', 'index', 'tags', 'isNoteOpened'],
   data () {
     return {
       isVisible: false,
