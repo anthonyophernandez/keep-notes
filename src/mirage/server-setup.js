@@ -77,6 +77,8 @@ export default function () {
   })
   server.delete('/bin/:id', (schema, request) => {
     const id = request.params.id
+    const note = schema.db.bin.find(id)
     schema.db.bin.remove(id)
+    return note
   })
 }

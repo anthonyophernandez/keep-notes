@@ -78,7 +78,7 @@ export default new Vuex.Store({
       state.bin = bin
     },
     DELETE_FOREVER (state, note) {
-      state.bin = state.bin.filter(n => n.id === note.id)
+      state.bin = state.bin.filter(n => n.id !== note.id)
     }
   },
   actions: {
@@ -165,7 +165,8 @@ export default new Vuex.Store({
     },
     async deleteNoteForever ({ commit }, note) {
       const response = await Api().delete(`/api/bin/${note.id}`, note)
-      commit('DELETE_FOREVER', response)
+
+      commit('DELETE_FOREVER', response.data)
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {
       commit('SET_MENU_DISPLAYED', isMenuDisplayed)
@@ -174,7 +175,7 @@ export default new Vuex.Store({
       commit('SET_GRID_DISPLAYED', isGridDisplayed)
     },
     updateMenuButtonPressed ({ commit }, isMenuButtonPressed) {
-      commit('SET_GRID_DISPLAYED', isMenuButtonPressed)
+      commit('SET_MENU_BUTTON_PRESSED', isMenuButtonPressed)
     },
     updateSection ({ commit }, sectionSelected) {
       commit('SET_SELECTION', sectionSelected)

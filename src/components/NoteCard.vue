@@ -169,6 +169,33 @@
       </div>
       <button v-show="isNoteOpened" class="px-3 h-8 rounded hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="close">Close</button>
     </div>
+    <div v-else class="flex items-center w-full h-12 mb-1 px-2">
+      <button class="relative flex items-center justify-center w-8 h-8 mr-2 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="deleteNoteForever" @mouseover="showTooltip('delete-forever')" @mouseleave="hideTooltip('delete-forever')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-trash" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="10" y1="11" x2="10" y2="17" />
+          <line x1="14" y1="11" x2="14" y2="17" />
+          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+        </svg>
+        <div ref="delete-forever" class="hidden absolute items-center justify-center w-20 -mb-16 -mr-6 rounded bg-gray-700 bg-opacity-75">
+          <span class="text-xs text-white">Delete forever</span>
+        </div>
+      </button>
+      <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('restore')" @mouseleave="hideTooltip('restore')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-file-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+          <line x1="12" y1="11" x2="12" y2="17" />
+          <line x1="9" y1="14" x2="15" y2="14" />
+        </svg>
+        <div ref="restore" class="hidden absolute items-center justify-center w-12 -mb-16 -ml-0 rounded bg-gray-700 bg-opacity-75">
+          <span class="text-xs text-white">Restore</span>
+        </div>
+      </button>
+    </div>
   </div>
 </template>
 

@@ -5,7 +5,7 @@
       :tags="bin"
       :selectedNotes="selectedNotes"
       @clearSelection="clearSelection"
-      @deleteNotes="deleteNotes"
+      @deleteNotesForever="deleteNotesForever"
       :isTrashView="true"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
     <MainSection ref="main" :isTrashView="true" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
@@ -46,9 +46,6 @@ export default {
       isMenuButtonPressed: state => state.isMenuButtonPressed
     })
   },
-  async created () {
-    await this.$store.dispatch('loadBin')
-  },
   methods: {
     toggleMenu () {
       this.$store.dispatch('updateMenuButtonPressed', !this.isMenuButtonPressed)
@@ -66,7 +63,7 @@ export default {
       })
       this.selectedNotes = []
     },
-    async deleteNotes () {
+    async deleteNotesForever () {
       this.selectedNotes.forEach(elem => {
         this.$refs.main.$refs['note-' + elem][0].deleteNoteForever()
       })

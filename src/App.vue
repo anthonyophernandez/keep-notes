@@ -8,6 +8,7 @@
 export default {
   name: 'App',
   async created () {
+    await this.$store.dispatch('loadBin')
     await this.$store.dispatch('loadAllTags')
     await this.$store.dispatch('loadAllNotes')
   }
