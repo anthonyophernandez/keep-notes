@@ -47,6 +47,7 @@
       >
         <span class="cursor-pointer text-white text-xs">{{ getTag(tagId).name }}</span>
         <button
+          v-show="!isTrashView"
           :ref="'tag-' + index"
           class="absolute top-0 right-0 hidden items-center justify-center bg-black text-gray-700 w-6 h-6 rounded-full hover:text-gray-500 hover:bg-gray-700 focus:outline-none"
           @click="deleteTagFromNote(tagId)"
@@ -183,7 +184,7 @@
           <span class="text-xs text-white">Delete forever</span>
         </div>
       </button>
-      <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('restore')" @mouseleave="hideTooltip('restore')">
+      <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="restoreNote" @mouseover="showTooltip('restore')" @mouseleave="hideTooltip('restore')">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-file-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
           <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -274,6 +275,16 @@ export default {
     },
     async deleteNoteForever () {
       await this.$store.dispatch('deleteNoteForever', this.note)
+      this.$emit('close')
+    },
+    async restoreNote () {
+      const note = await this.copyNote()
+      console.log(note)
+      note.tagIds.forEach(async tId => {
+        const tag = this.getTag(tId)
+        await this.$store.dispatch('connectNoteToTag', { note: note, tag: tag })
+      })
+      await this.$store.dispatch('deleteNoteForever', this.note)
     },
     async copyNote () {
       const tagIds = this.note.tagIds
@@ -292,6 +303,7 @@ export default {
       })
       this.$emit('close')
       this.isShownMoreSection = false
+      return savedNote
     },
     openLabelSection () {
       this.isShownMoreSection = false

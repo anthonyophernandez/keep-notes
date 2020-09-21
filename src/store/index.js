@@ -59,6 +59,9 @@ export default new Vuex.Store({
     DISCONNECT_NOTE_FROM_TAG (state, { note, tag }) {
       tag.noteIds = tag.noteIds.filter(n => n !== note.id)
     },
+    CONNECT_NOTE_TO_TAG (state, { note, tag }) {
+      tag.noteIds.unshift(note.id.toString())
+    },
     SET_MENU_DISPLAYED (state, isMenuDisplayed) {
       state.isMenuDisplayed = isMenuDisplayed
     },
@@ -145,6 +148,13 @@ export default new Vuex.Store({
       })
       commit('CONNECT_TAG_TO_NOTE', { note, tag })
     },
+    async connectNoteToTag ({ commit }, { note, tag }) {
+      await Api().post('/api/note_tags', {
+        noteId: note.id,
+        tagId: tag.id
+      })
+      commit('CONNECT_NOTE_TO_TAG', { note, tag })
+    },
     async disconnectTagFromNote ({ commit }, { note, tag }) {
       await Api().post('/api/note_tags/delete', {
         noteId: note.id,
@@ -165,7 +175,6 @@ export default new Vuex.Store({
     },
     async deleteNoteForever ({ commit }, note) {
       const response = await Api().delete(`/api/bin/${note.id}`, note)
-
       commit('DELETE_FOREVER', response.data)
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {
