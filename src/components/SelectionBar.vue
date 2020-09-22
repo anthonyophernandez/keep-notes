@@ -143,7 +143,7 @@
             <span class="text-xs text-white">Delete forever</span>
           </div>
         </button>
-        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @mouseover="showTooltip('restore')" @mouseleave="hideTooltip('restore')">
+        <button class="relative flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-600 hover:bg-opacity-25 text-gray-600 hover:text-white focus:outline-none" @click="restoreNotes" @mouseover="showTooltip('restore')" @mouseleave="hideTooltip('restore')">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-current icon icon-tabler icon-tabler-file-plus" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
             <path d="M14 3v4a1 1 0 0 0 1 1h4" />
@@ -202,6 +202,9 @@ export default {
     },
     deleteNotesForever () {
       this.$emit('deleteNotesForever')
+    },
+    restoreNotes () {
+      this.$emit('restoreNotes')
     },
     copyNotes () {
       this.$emit('copyNotes')

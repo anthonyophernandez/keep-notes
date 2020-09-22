@@ -279,7 +279,6 @@ export default {
     },
     async restoreNote () {
       const note = await this.copyNote()
-      console.log(note)
       note.tagIds.forEach(async tId => {
         const tag = this.getTag(tId)
         await this.$store.dispatch('connectNoteToTag', { note: note, tag: tag })

@@ -6,6 +6,7 @@
       :selectedNotes="selectedNotes"
       @clearSelection="clearSelection"
       @deleteNotesForever="deleteNotesForever"
+      @restoreNotes="restoreNotes"
       :isTrashView="true"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
     <MainSection ref="main" :isTrashView="true" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
@@ -63,9 +64,15 @@ export default {
       })
       this.selectedNotes = []
     },
-    async deleteNotesForever () {
+    deleteNotesForever () {
       this.selectedNotes.forEach(elem => {
         this.$refs.main.$refs['note-' + elem][0].deleteNoteForever()
+      })
+      this.clearSelection()
+    },
+    restoreNotes () {
+      this.selectedNotes.forEach(elem => {
+        this.$refs.main.$refs['note-' + elem][0].restoreNote()
       })
       this.clearSelection()
     }
