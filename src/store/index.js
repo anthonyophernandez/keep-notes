@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     notes: [],
     tags: [],
+    archive: [],
     bin: [],
     isMenuDisplayed: false,
     isGridDisplayed: false,
@@ -82,6 +83,9 @@ export default new Vuex.Store({
     },
     DELETE_FOREVER (state, note) {
       state.bin = state.bin.filter(n => n.id !== note.id)
+    },
+    SET_ARCHIVE (state, archive) {
+      state.archive = archive
     }
   },
   actions: {
@@ -176,6 +180,10 @@ export default new Vuex.Store({
     async deleteNoteForever ({ commit }, note) {
       const response = await Api().delete(`/api/bin/${note.id}`, note)
       commit('DELETE_FOREVER', response.data)
+    },
+    async loadArchive ({ commit }) {
+      const response = await Api().get('/api/archive')
+      commit('SET_ARCHIVE', response.data)
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {
       commit('SET_MENU_DISPLAYED', isMenuDisplayed)

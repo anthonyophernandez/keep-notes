@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full">
+  <div class="w-full h-full">
     <TopBar @toggleMenu="toggleMenu" @displayGrid="$store.dispatch('updateGridDisplayed', !isGridDisplayed)" :isGridDisplayed="isGridDisplayed"/>
     <SelectionBar
       :tags="tags"
@@ -14,7 +14,7 @@
       @selectTag="selectTag"
       :isTrashView="false"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
-    <MainSection ref="main" :isTrashView="false" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
+    <MainSection ref="main" :isTrashView="false" :isArchiveView="false" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
   </div>
 </template>

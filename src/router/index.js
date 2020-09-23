@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Label from '../views/Label.vue'
 import Trash from '../views/Trash.vue'
+import Archive from '../views/Archive.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/trash',
     name: 'Trash',
     component: Trash
+  },
+  {
+    path: '/archive',
+    name: 'Archive',
+    component: Archive
   }
 ]
 

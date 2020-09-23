@@ -3,6 +3,7 @@ import { camelCase } from 'lodash'
 import notesJSON from './notes.json'
 import tagsJSON from './tags.json'
 import binJSON from './bin.json'
+import archiveJSON from './archive.json'
 
 export default function () {
   const server = new Server({
@@ -32,7 +33,8 @@ export default function () {
     fixtures: {
       notes: notesJSON,
       tags: tagsJSON,
-      bin: binJSON
+      bin: binJSON,
+      archive: archiveJSON
     }
   })
 
@@ -80,5 +82,9 @@ export default function () {
     const note = schema.db.bin.find(id)
     schema.db.bin.remove(id)
     return note
+  })
+
+  server.get('/archive', (schema, _) => {
+    return schema.db.archive
   })
 }

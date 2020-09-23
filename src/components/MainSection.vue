@@ -1,8 +1,8 @@
 <template>
   <main class="fixed inset-0 px-2 mt-16 overflow-y-auto" :class="(isMenuDisplayed) ? 'ml-20 sm:ml-64 sm:z-40' : 'ml-20'">
-    <TakeNote v-if="!isTrashView" class="mx-auto mt-2 mb-8" :tags="tags"/>
-    <div v-if="!isTrashView" v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">PINNED</div>
-    <div v-if="!isTrashView" class="grid gap-5 mt-4 mb-4" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
+    <TakeNote v-if="!isTrashView && !isArchiveView" class="mx-auto mt-2 mb-8" :tags="tags"/>
+    <div v-if="!isTrashView && !isArchiveView" v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">PINNED</div>
+    <div v-if="!isTrashView && !isArchiveView" class="grid gap-5 mt-4 mb-4" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
       <NoteCard
         :ref="'note-pinned-'+ index"
         class="w-auto h-auto mx-auto"
@@ -18,8 +18,8 @@
         :isTrashView="isTrashView"
       />
     </div>
-    <div v-if="!isTrashView" v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">OTHERS</div>
-    <div v-if="!isTrashView" class="grid gap-5 mt-4 mb-20" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
+    <div v-if="!isTrashView && !isArchiveView" v-show="arePinned.length > 0" class="w-full text-center text-xs font-semibold text-gray-500">OTHERS</div>
+    <div v-if="!isTrashView && !isArchiveView" class="grid gap-5 mt-4 mb-20" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
       <NoteCard
         :ref="'note-unpinned-'+ index"
         class="w-auto h-auto mx-auto"
@@ -35,7 +35,7 @@
         :isTrashView="isTrashView"
       />
     </div>
-    <div v-if="isTrashView" class="grid gap-5 mt-4 mb-20" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
+    <div v-if="isTrashView || isArchiveView" class="grid gap-5 mt-4 mb-20" :class="(isGridDisplayed) ? 'xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  md:mx-8 sm:mx-0' : 'grid-cols-1'">
       <NoteCard
         :ref="(note.isPinned)? 'note-pinned-' + index : 'note-unpinned-' + index"
         class="w-auto h-auto mx-auto"
@@ -78,7 +78,7 @@ export default {
     NoteCard,
     TakeNote
   },
-  props: ['isTrashView', 'notes', 'tags', 'isMenuDisplayed', 'isGridDisplayed'],
+  props: ['isTrashView', 'isArchiveView', 'notes', 'tags', 'isMenuDisplayed', 'isGridDisplayed'],
   data () {
     return {
       isNoteOpened: false,

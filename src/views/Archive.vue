@@ -14,27 +14,27 @@
       @selectTag="selectTag"
       :isTrashView="false"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
-    <MainSection ref="main" :isTrashView="false" :isArchiveView="false" @selection="setSelection" :notes="notes" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
+    <MainSection ref="main" :isTrashView="false" :isArchiveView="true" @selection="setSelection" :notes="archive" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import MainSection from '../components/MainSection.vue'
 import SideMenu from '../components/SideMenu.vue'
 import TopBar from '../components/TopBar.vue'
 import SelectionBar from '../components/SelectionBar.vue'
 
 import EditLabelsModal from '../components/EditLabelsModal.vue'
+import { mapState } from 'vuex'
 
 export default {
-  name: 'Label',
+  name: 'Archive',
   components: {
     MainSection,
-    TopBar,
-    SideMenu,
     EditLabelsModal,
+    SideMenu,
+    TopBar,
     SelectionBar
   },
   data () {
@@ -45,22 +45,12 @@ export default {
   },
   computed: {
     ...mapState({
+      archive: state => state.notes,
       tags: state => state.tags,
       isMenuDisplayed: state => state.isMenuDisplayed,
       isGridDisplayed: state => state.isGridDisplayed,
       isMenuButtonPressed: state => state.isMenuButtonPressed
-    }),
-    ...mapGetters({
-      getTag: 'getTag',
-      getNote: 'getNote'
-    }),
-    tag () {
-      return this.getTag(this.$route.params.id)
-    },
-    notes () {
-      const notes = this.tag.noteIds.map(nId => this.getNote(nId))
-      return notes
-    }
+    })
   },
   methods: {
     toggleMenu () {
@@ -140,12 +130,7 @@ export default {
     }
   },
   mounted () {
-    const index = this.tags.indexOf(this.tag)
-    this.$store.dispatch('updateSection', '3-' + index).catch(() => {})
-  },
-  updated () {
-    const index = this.tags.indexOf(this.tag)
-    this.$store.dispatch('updateSection', '3-' + index).catch(() => {})
+    this.$store.dispatch('updateSection', '5').catch(() => {})
   }
 }
 </script>
