@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapState({
-      archive: state => state.notes,
+      archive: state => state.archive,
       tags: state => state.tags,
       isMenuDisplayed: state => state.isMenuDisplayed,
       isGridDisplayed: state => state.isGridDisplayed,

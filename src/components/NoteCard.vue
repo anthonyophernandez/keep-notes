@@ -252,8 +252,19 @@ export default {
         this.$emit('unselect', isPinned + '-' + this.index)
       }
     },
-    archiveNote () {
+    async archiveNote () {
       this.note.isArchived = !this.note.isArchived
+      this.note.isPinned = false
+      await this.$store.dispatch('updateNote', this.note)
+      if (this.note.isArchived) {
+        this.note.tagIds.forEach(async tId => {
+          const tag = this.getTag(tId)
+          await this.$store.dispatch('disconnectNoteFromTag', { note: this.note, tag: tag })
+        })
+        await this.$store.dispatch('archiveNote', this.note)
+      } else {
+        // TODO: unarchiveNote & connectNoteToTags
+      }
     },
     async pinNote () {
       this.note.isPinned = !this.note.isPinned

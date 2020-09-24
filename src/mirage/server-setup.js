@@ -87,4 +87,9 @@ export default function () {
   server.get('/archive', (schema, _) => {
     return schema.db.archive
   })
+  server.post('/archive', (schema, request) => {
+    const json = JSON.parse(request.requestBody)
+    const response = schema.db.archive.insert(json)
+    return response
+  })
 }
