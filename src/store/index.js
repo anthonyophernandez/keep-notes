@@ -89,6 +89,9 @@ export default new Vuex.Store({
     },
     ADD_NOTE_TO_ARCHIVE (state, note) {
       state.archive = [note].concat(state.archive)
+    },
+    REMOVE_NOTE_FROM_ARCHIVE (state, note) {
+      state.archive = state.archive.filter(n => n.id !== note.id)
     }
   },
   actions: {
@@ -194,6 +197,12 @@ export default new Vuex.Store({
         commit('DELETE_NOTE', note)
         const responseArchive = await Api().post('/api/archive', note)
         commit('ADD_NOTE_TO_ARCHIVE', responseArchive.data)
+      }
+    },
+    async unarchiveNote ({ commit }, note) {
+      const response = await Api().delete(`/api/archive/${note.id}`, note)
+      if (response.status === 200 || response.status === 204) {
+        commit('REMOVE_NOTE_FROM_ARCHIVE', response.data)
       }
     },
     updateMenuDisplayed ({ commit }, isMenuDisplayed) {

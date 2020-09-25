@@ -12,7 +12,8 @@
       @copyNotes="copyNotes"
       @createLabel="createLabel"
       @selectTag="selectTag"
-      :isTrashView="false"/>
+      :isTrashView="false"
+      :isArchiveView="true"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
     <MainSection ref="main" :isTrashView="false" :isArchiveView="true" @selection="setSelection" :notes="archive" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>

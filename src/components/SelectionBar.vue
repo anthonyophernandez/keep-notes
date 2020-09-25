@@ -81,7 +81,8 @@
             <line x1="10" y1="12" x2="14" y2="12" />
           </svg>
           <div ref="archive" class="hidden absolute items-center justify-center px-1 -mb-16 rounded bg-gray-700 bg-opacity-75">
-            <span class="text-xs text-white">Archive</span>
+            <span v-if="!isArchiveView" class="text-xs text-white">Archive</span>
+            <span v-else class="text-xs text-white">Unarchive</span>
           </div>
         </button>
         <div class="relative">
@@ -163,7 +164,7 @@
 import ColorSelector from '../components/ColorSelector.vue'
 export default {
   name: 'SelectionBar',
-  props: ['isTrashView', 'selectedNotes', 'tags'],
+  props: ['isTrashView', 'isArchiveView', 'selectedNotes', 'tags'],
   components: {
     ColorSelector
   },

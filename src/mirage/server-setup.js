@@ -92,4 +92,10 @@ export default function () {
     const response = schema.db.archive.insert(json)
     return response
   })
+  server.delete('/archive/:id', (schema, request) => {
+    const id = request.params.id
+    const note = schema.db.archive.find(id)
+    schema.db.archive.remove(id)
+    return note
+  })
 }

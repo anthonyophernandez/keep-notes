@@ -254,8 +254,10 @@ export default {
     },
     async archiveNote () {
       this.note.isArchived = !this.note.isArchived
-      this.note.isPinned = false
-      await this.$store.dispatch('updateNote', this.note)
+      if (this.note.isPinned) {
+        this.note.isPinned = false
+        await this.$store.dispatch('updateNote', this.note)
+      }
       if (this.note.isArchived) {
         this.note.tagIds.forEach(async tId => {
           const tag = this.getTag(tId)
@@ -264,6 +266,12 @@ export default {
         await this.$store.dispatch('archiveNote', this.note)
       } else {
         // TODO: unarchiveNote & connectNoteToTags
+        const note = await this.copyNote()
+        note.tagIds.forEach(async tId => {
+          const tag = this.getTag(tId)
+          await this.$store.dispatch('connectNoteToTag', { note: note, tag: tag })
+        })
+        await this.$store.dispatch('unarchiveNote', this.note)
       }
     },
     async pinNote () {

@@ -7,7 +7,8 @@
       @clearSelection="clearSelection"
       @deleteNotesForever="deleteNotesForever"
       @restoreNotes="restoreNotes"
-      :isTrashView="true"/>
+      :isTrashView="true"
+      :isArchiveView="false"/>
     <SideMenu :isMenuDisplayed="isMenuDisplayed" :isMenuButtonPressed="isMenuButtonPressed" :tags="tags" @openEditLabelsModal="openEditLabelsModal"/>
     <MainSection ref="main" :isTrashView="true" :isArchiveView="false" @selection="setSelection" :notes="bin" :tags="tags" :isMenuDisplayed="isMenuDisplayed" :isGridDisplayed="isGridDisplayed"/>
     <EditLabelsModal :isModalOpen="isEditLabelsModalOpened" :labels="tags" @closeModal="isEditLabelsModalOpened = false"/>
