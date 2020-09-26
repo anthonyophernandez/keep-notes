@@ -214,6 +214,7 @@ export default {
         this.$store.dispatch('disconnectTagFromNote', { note: this.getNote(nid), tag: tag })
       })
       await this.$store.dispatch('deleteTag', tag)
+      this.$router.push({ path: '/' }).catch(() => {})
     }
   }
 }

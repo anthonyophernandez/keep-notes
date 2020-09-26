@@ -56,7 +56,7 @@ export default {
       getNote: 'getNote'
     }),
     tag () {
-      return this.getTag(this.$route.params.id)
+      return this.getTag(this.$route.params.id) || { noteIds: [] }
     },
     notes () {
       const notes = this.tag.noteIds.map(nId => this.getNote(nId))

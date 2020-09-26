@@ -1,13 +1,16 @@
 <template>
   <header class="w-full h-16">
     <div class="flex items-center md:justify-between w-full h-full border-b border-gray-700">
-      <button class="flex items-center justify-center w-10 h-10 ml-5 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none focus:bg-gray-600 focus:bg-opacity-25" @click="toggleMenu">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current text-white icon icon-tabler icon-tabler-menu" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <line x1="4" y1="8" x2="20" y2="8" />
-          <line x1="4" y1="16" x2="20" y2="16" />
-        </svg>
-      </button>
+      <div class="flex items-center w-auto">
+        <button class="flex items-center justify-center w-10 h-10 ml-5 rounded hover:bg-gray-600 hover:bg-opacity-25 focus:outline-none focus:bg-gray-600 focus:bg-opacity-25" @click="toggleMenu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 stroke-current text-white icon icon-tabler icon-tabler-menu" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <line x1="4" y1="8" x2="20" y2="8" />
+            <line x1="4" y1="16" x2="20" y2="16" />
+          </svg>
+        </button>
+        <div class="hidden sm:block w-auto ml-6 text-white text-2xl font-bold">{{ nameOfSection }}</div>
+      </div>
       <div class="relative w-full md:max-w-md mx-6">
         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-current text-gray-600 icon icon-tabler icon-tabler-search" viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -40,6 +43,21 @@
 export default {
   name: 'TopBar',
   props: ['isGridDisplayed'],
+  computed: {
+    nameOfSection () {
+      let nameOfSection = ''
+      if (this.$route.name === 'Home') {
+        nameOfSection = 'Notes'
+      } else if (this.$route.name === 'Label') {
+        nameOfSection = this.$route.params.name
+      } else if (this.$route.name === 'Archive') {
+        nameOfSection = 'Archive'
+      } else if (this.$route.name === 'Trash') {
+        nameOfSection = 'Trash'
+      }
+      return nameOfSection
+    }
+  },
   methods: {
     toggleMenu () {
       this.$emit('toggleMenu')
