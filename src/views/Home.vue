@@ -69,6 +69,7 @@ export default {
         this.$refs.main.$refs['note-' + ele][0].selectNote()
       })
       this.selectedNotes = []
+      this.$refs.main.selectedNotes = []
     },
     archiveNotes () {
       this.selectedNotes.forEach(elem => {
