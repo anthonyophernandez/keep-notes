@@ -1,24 +1,24 @@
 # keep-notes
 
-## Project setup
+## Description
+
+A clone of Google Keep.
+
+It does have:
+* Create / Copy / Delete (Move to Trash)
+* Delete forever / Restore
+* Archive / Unarchive
+* Pinned / Unpinned
+* Change color
+* Label system
+* Grid 
+
+However, it doesn't have all the functions of Google Keep like search, reminders, snackbar system, etc.
+
+And it uses an API mocking library - Mirage JS.
+
+## To see the demo, run
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

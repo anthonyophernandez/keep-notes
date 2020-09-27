@@ -200,7 +200,7 @@ export default {
       this.selectedIndexColor = obj.selectedIndexColor
     },
     archiveNote () {
-      this.isArchived = !this.isArchived
+      // this.isArchived = true
     },
     pinNote () {
       this.isPinned = !this.isPinned
@@ -216,6 +216,7 @@ export default {
       this.noteTagIds = []
     },
     async close () {
+      const currentTagId = (this.$route.name === 'Label') ? this.$route.params.id : null
       const note = {
         title: this.title,
         content: this.content,
@@ -226,7 +227,14 @@ export default {
         selectedIndexColor: this.selectedIndexColor
       }
       if (this.title.length > 0 || this.content.length > 0) {
-        await this.$store.dispatch('createNote', note)
+        if (currentTagId) {
+          note.tagIds = [currentTagId].concat(note.tagIds)
+        }
+        const newNote = await this.$store.dispatch('createNote', note)
+        newNote.tagIds.forEach(async tId => {
+          const tag = this.getTag(tId)
+          await this.$store.dispatch('connectNoteToTag', { note: newNote, tag: tag })
+        })
       }
       this.clear()
     },

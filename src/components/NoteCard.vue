@@ -265,7 +265,6 @@ export default {
         })
         await this.$store.dispatch('archiveNote', this.note)
       } else {
-        // TODO: unarchiveNote & connectNoteToTags
         const note = await this.copyNote()
         note.tagIds.forEach(async tId => {
           const tag = this.getTag(tId)
